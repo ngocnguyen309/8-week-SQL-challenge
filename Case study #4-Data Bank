@@ -119,36 +119,46 @@ GROUP BY customer_id,
          txn_type,
          DATE_TRUNC('month',txn_date) + '1 month - 1 day'::INTERVAL
 ),
-closing AS 
+ending_month AS
+(SELECT DISTINCT customer_id,
+        ('2020-01-31'::DATE + GENERATE_SERIES(0,3)*'1 MONTH'::interval) AS end_month
+FROM data_bank.customer_transactions
+),
+closing AS
 (
-SELECT customer_id, 
-       end_of_month, 
+SELECT e.customer_id, 
+       end_month, 
        COALESCE(amount,0) AS monthly_changes, 
-       SUM(amount) OVER(PARTITION BY customer_id ORDER BY end_of_month ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS closing_balance
-FROM monthly_change
+       SUM(amount) OVER(PARTITION BY e.customer_id ORDER BY end_month ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS closing_balance
+FROM ending_month as e
+LEFT JOIN monthly_change as m
+on m.end_of_month=e.end_month
+and m.customer_id=e.customer_id
 ),
 solution AS 
 (
 SELECT customer_id,
-       end_of_month,
+       end_month,
        monthly_changes,
        closing_balance,
-       ROW_NUMBER() OVER (PARTITION BY customer_id, end_of_month ORDER BY end_of_month) AS record_no
-FROM closing),
+       ROW_NUMBER() OVER (PARTITION BY customer_id, end_month ORDER BY end_month) AS record_no
+FROM closing
+),
 solution1 AS 
 (
 SELECT customer_id,
-       end_of_month, 
+       end_month, 
        monthly_changes, 
        closing_balance,
-       LEAD(record_no) OVER (PARTITION BY customer_id, end_of_month ORDER BY end_of_month) AS lead_no
-FROM solution)
-
+       LEAD(record_no) OVER (PARTITION BY customer_id, end_month ORDER BY end_month) AS lead_no
+FROM solution
+)
 SELECT customer_id, 
-       end_of_month,
+       end_month,
        monthly_changes, 
        closing_balance
 FROM solution1
 WHERE lead_no IS NULL
+
 
 
