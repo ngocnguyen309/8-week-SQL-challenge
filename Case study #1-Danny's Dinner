@@ -1,4 +1,4 @@
-#1. What is the total amount each customer spent at the restaurant?
+--1. What is the total amount each customer spent at the restaurant?
 SELECT customer_id, 
        SUM(price) AS total_amount
 FROM dannys_diner.sales AS s
@@ -7,17 +7,17 @@ ON s.product_id=m.product_id
 GROUP BY customer_id;
 C spends $36, B spends $74 and A spends $76
 
-#2. How many days has each customer visited the restaurant?
+--2. How many days has each customer visited the restaurant?
 SELECT customer_id, 
        COUNT(distinct order_date) AS days
 FROM dannys_diner.sales AS s
 JOIN dannys_diner.menu AS m
 ON s.product_id=m.product_id
 GROUP BY customer_id;
-/* A visited the restaurant in 4 days, B visited the restaurant in 6 days and C visited the restaurant in 2 days*/
+A visited the restaurant in 4 days, B visited the restaurant in 6 days and C visited the restaurant in 2 days
 
-#3. What was the first item from the menu purchased by each customer?
-WITH da AS 
+--3. What was the first item from the menu purchased by each customer?
+WITH first_item AS 
 (
 SELECT customer_id, 
        product_name, 
@@ -28,24 +28,23 @@ ON s.product_id=m.product_id
 )
 
 SELECT *
-FROM da 
+FROM first_item
 WHERE ranks=1;
-/* The first item A purchased are curry and sushi, B purchased curry first and C purchased ramen first*/
+The first item A purchased are curry and sushi, B purchased curry first and C purchased ramen first
 
-#4. What is the most purchased item on the menu and how many times was it purchased by all customers?
+--4. What is the most purchased item on the menu and how many times was it purchased by all customers?
 SELECT product_name, 
-       COUNT(s.product_id) AS total_amount
+       TOP 1 COUNT(s.product_id) AS total_amount
 FROM dannys_diner.sales AS s
 JOIN dannys_diner.menu AS m
 ON s.product_id=m.product_id
 GROUP BY product_name
-ORDER BY COUNT(s.product_id) DESC
-LIMIT 1;
-/* Ramen is the most purchased item on the menu and it was purchased 8 times by customers*/
+ORDER BY COUNT(s.product_id) DESC;
+Ramen is the most purchased item on the menu and it was purchased 8 times by customers
 
 
-#5. Which item was the most popular for each customer?
-WITH da AS 
+--5. Which item was the most popular for each customer?
+WITH popular_item AS 
 (
 SELECT customer_id, 
        product_name, 
@@ -57,11 +56,11 @@ GROUP BY customer_id, product_name
 )
 
 SELECT *
-FROM da 
+FROM popular_item
 WHERE ranks=1;
 
 
-#6. Which item was purchased first by the customer after they became a member?
+--6. Which item was purchased first by the customer after they became a member?
 WITH da as 
 (
 SELECT s.customer_id, 
