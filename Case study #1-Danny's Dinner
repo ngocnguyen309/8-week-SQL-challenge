@@ -1,0 +1,164 @@
+#1. What is the total amount each customer spent at the restaurant?
+SELECT customer_id, 
+       SUM(price) AS total_amount
+FROM dannys_diner.sales AS s
+JOIN dannys_diner.menu AS m
+ON s.product_id=m.product_id
+GROUP BY customer_id;
+C spends $36, B spends $74 and A spends $76
+
+#2. How many days has each customer visited the restaurant?
+SELECT customer_id, 
+       COUNT(distinct order_date) AS days
+FROM dannys_diner.sales AS s
+JOIN dannys_diner.menu AS m
+ON s.product_id=m.product_id
+GROUP BY customer_id;
+/* A visited the restaurant in 4 days, B visited the restaurant in 6 days and C visited the restaurant in 2 days*/
+
+#3. What was the first item from the menu purchased by each customer?
+WITH da AS 
+(
+SELECT customer_id, 
+       product_name, 
+       DENSE_RANK() OVER(PARTITION BY customer_id ORDER BY order_date) AS ranks
+FROM dannys_diner.sales AS s
+JOIN dannys_diner.menu AS m
+ON s.product_id=m.product_id
+)
+
+SELECT *
+FROM da 
+WHERE ranks=1;
+/* The first item A purchased are curry and sushi, B purchased curry first and C purchased ramen first*/
+
+#4. What is the most purchased item on the menu and how many times was it purchased by all customers?
+SELECT product_name, 
+       COUNT(s.product_id) AS total_amount
+FROM dannys_diner.sales AS s
+JOIN dannys_diner.menu AS m
+ON s.product_id=m.product_id
+GROUP BY product_name
+ORDER BY COUNT(s.product_id) DESC
+LIMIT 1;
+/* Ramen is the most purchased item on the menu and it was purchased 8 times by customers*/
+
+
+#5. Which item was the most popular for each customer?
+WITH da AS 
+(
+SELECT customer_id, 
+       product_name, 
+       DENSE_RANK() OVER(PARTITION BY customer_id ORDER BY COUNT(s.product_id) DESC) as ranks
+FROM dannys_diner.sales AS s
+JOIN dannys_diner.menu AS m
+ON s.product_id=m.product_id
+GROUP BY customer_id, product_name
+)
+
+SELECT *
+FROM da 
+WHERE ranks=1;
+
+
+#6. Which item was purchased first by the customer after they became a member?
+WITH da as 
+(
+SELECT s.customer_id, 
+       product_name, 
+       DENSE_RANK() OVER(PARTITION BY s.customer_id ORDER BY order_date) AS ranks
+FROM dannys_diner.sales AS s
+JOIN dannys_diner.menu AS m
+ON s.product_id=m.product_id
+JOIN dannys_diner.members AS me
+ON s.customer_id=me.customer_id
+WHERE order_date>=join_date
+)
+
+SELECT *
+FROM da
+WHERE ranks=1;
+/* Curry is the first item that A purchased after becoming a member, B purchase sushi first after B became a member*/
+
+#7. Which item was purchased just before the customer became a member?
+WITH da AS 
+(
+SELECT s.customer_id, 
+       product_name, 
+       DENSE_RANK() OVER(PARTITION BY s.customer_id ORDER BY order_date DESC) AS ranks
+FROM dannys_diner.sales AS s
+JOIN dannys_diner.menu AS m
+ON s.product_id=m.product_id
+JOIN dannys_diner.members AS me
+ON s.customer_id=me.customer_id
+WHERE order_date<join_date)
+
+SELECT *
+FROM da
+WHERE ranks=1;
+/* A purchased sushi and curry just before becoming a member, B purchased sushi just before becoming a member of the restaurant*/
+
+
+#8. What is the total items and amount spent for each member before they became a member?
+SELECT s.customer_id, 
+       COUNT(DISTINCT s.product_id) AS total_items, 
+       SUM(price) AS total_amount
+FROM dannys_diner.sales AS s
+JOIN dannys_diner.menu AS m
+ON s.product_id=m.product_id
+JOIN dannys_diner.members AS me
+ON s.customer_id=me.customer_id
+WHERE order_date<join_date
+GROUP BY s.customer_id;
+/* A spends $25 for 2 items (carry and sushi) before becoming a member, B spends $40 for 2 items (sushi) before becoming a member*/
+
+#9. If each $1 spent equates to 10 points and sushi has a 20 points multiplier - how many points would each customer have?
+WITH da AS 
+(
+SELECT product_name, 
+       product_id, 
+       (CASE WHEN product_id=1 THEN price*10 ELSE price*20 END) AS points
+FROM dannys_diner.menu
+)
+
+SELECT customer_id, 
+       SUM(points)
+FROM da
+JOIN dannys_diner.sales AS s
+ON da.product_id=s.product_id
+GROUP BY customer_id;
+/* A will has 1420 points, followed by B with 1280 poitns whereas C has lowest point with only 720*/
+
+
+/* Join All The Things*/
+SELECT m.customer_id, 
+       order_date, 
+       product_name, 
+       price, 
+       (CASE WHEN order_date>=join_date THEN 'Y' ELSE 'N' END) AS member
+FROM dannys_diner.sales AS s
+JOIN dannys_diner.menu AS me
+ON s.product_id=me.product_id
+JOIN dannys_diner.members AS m
+ON m.customer_id=s.customer_id
+ORDER BY m.customer_id, order_date;
+
+/* Rank all things*/
+WITH da AS 
+(
+SELECT m.customer_id, 
+       order_date, 
+       product_name, 
+       price, 
+       (CASE WHEN order_date>=join_date THEN 'Y' ELSE 'N' END) AS member
+FROM dannys_diner.sales AS s
+JOIN dannys_diner.menu AS me
+ON s.product_id=me.product_id
+JOIN dannys_diner.members AS m
+ON m.customer_id=s.customer_id
+ORDER BY m.customer_id, order_date)
+
+SELECT *, 
+      (CASE WHEN member='Y' THEN DENSE_RANK() OVER(PARTITION BY customer_id, member ORDER BY order_date) 
+      ELSE null END) AS rank
+FROM da
