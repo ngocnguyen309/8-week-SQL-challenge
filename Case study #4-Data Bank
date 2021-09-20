@@ -229,7 +229,7 @@ SELECT customer_id,
 	end_month, 
        ROUND((next_balance-closing_balance)/closing_balance,2) as changes
 FROM question5
-WHERE (next_balance IS NOT NULL OR next_balance <> 0)
+WHERE (next_balance IS NOT NULL)
 AND closing_balance <> 0
 AND end_month='2020-01-31'
 GROUP BY customer_id, 
@@ -238,6 +238,10 @@ GROUP BY customer_id,
          closing_balance
 HAVING ROUND((next_balance-closing_balance)/closing_balance,2) > 5
 )
+
+SELECT 100* COUNT(customer_id)::NUMERIC/(SELECT COUNT(DISTINCT customer_id) FROM question5 WHERE end_month='2020-01-31')
+FROM balance_changes
+--7% of customers increase their closing balance by more than 5% in the following month
 
 
 
