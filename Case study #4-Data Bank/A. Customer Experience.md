@@ -60,6 +60,7 @@ GROUP BY customer_id, node_id
 SELECT AVG(total_diff) AS avg_day
 FROM sum_diff
 ```
+![image](https://user-images.githubusercontent.com/89729029/134110729-694203a3-f077-497d-b247-170609a78133.png)
 
 - On average, customers are reallocated to a different node every 23.56 days
 
