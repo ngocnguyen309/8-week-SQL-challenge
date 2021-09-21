@@ -64,5 +64,5 @@ FROM sum_diff
 
 - On average, customers are reallocated to a different node every 23.56 days
 
-__--5. What is the median, 80th and 95th percentile for this same reallocation days metric for each region?__
+__5. What is the median, 80th and 95th percentile for this same reallocation days metric for each region?__
 > updating...
