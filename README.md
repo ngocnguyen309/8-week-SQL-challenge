@@ -1,11 +1,14 @@
 # 8-week-SQL-challenge
 
 ### CASE STUDY#1 - Dannys's Dinner
+![1](https://user-images.githubusercontent.com/89729029/134104581-4cffc884-99c3-4a8f-bca1-283e0b2dd89f.png)
+
 Danny seriously loves Japanese food so in the beginning of 2021, he decides to embark upon a risky venture and opens up a cute little restaurant that sells his 3 favourite foods: sushi, curry and ramen.
 
 Danny’s Diner is in need of your assistance to help the restaurant stay afloat - the restaurant has captured some very basic data from their few months of operation but have no idea how to use their data to help them run the business.
 
 ### CASE STUDY#2 - Pizza Runner
+
 Did you know that over 115 million kilograms of pizza is consumed daily worldwide??? (Well according to Wikipedia anyway…)
 
 Danny was scrolling through his Instagram feed when something really caught his eye - “80s Retro Styling and Pizza Is The Future!”
