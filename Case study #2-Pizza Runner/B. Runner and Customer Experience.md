@@ -1,4 +1,4 @@
-__1 How many runners signed up for each 1 week period?__
+__1. How many runners signed up for each 1 week period?__
 ```
 SELECT DATEPART(week, CAST(registration_date AS date)) AS weeks, 
        COUNT(runner_id) AS total
@@ -54,24 +54,25 @@ ON r.order_id=c.order_id
 GROUP BY customer_id
 ```
 
---5 What was the difference between the longest and shortest delivery times for all orders?
-select max(cast(duration as float))-min(cast(duration as float)) as dif_delivery_times
-from runner_orders
-/* The difference between the longest and shortest delivery time for all orders was 40 minutes*/
+__5 What was the difference between the longest and shortest delivery times for all orders?__
+```
+SELECT MAX(cast(duration as float))-min(cast(duration as float)) as dif_delivery_times
+FROM runner_orders
+```
 
-#6
-select runner_id, avg(cast(distance as float)/cast (duration as float)) as average_speed
-from runner_orders
-where duration<>''
-group by runner_id
-order by avg(cast(distance as float)/cast (duration as float)) desc
-/* runner 2 has the largest average speed with 1.04 km/ph and runner 3 has the smallest average speed with 0.66 km/ph*/
-/* when the average distance travelled for each customer increase, runner tend to increase their average speed/
-
---7 What is the successful delivery percentage for each runner?
+__6. What was the average speed for each runner for each delivery and do you notice any trend for these values?__
+```
+SELECT runner_id, 
+       avg(cast(distance as float)/cast (duration as float)) as average_speed
+FROM runner_orders
+WHERE duration<>''
+GROUP BY runner_id
+ORDER BY avg(cast(distance as float)/cast (duration as float)) desc
+```
+__7 What is the successful delivery percentage for each runner?__
+```
 SELECT runner_id, 
        CAST(SUM(CASE WHEN duration ='' THEN 0 ELSE 1 END) AS float)/CAST(COUNT(order_id) AS float)*100 AS percentage
 FROM runner_orders
 GROUP BY runner_id
---runner id 1 has 100%
---runner 2 has 75% sucessful delivery
+```
