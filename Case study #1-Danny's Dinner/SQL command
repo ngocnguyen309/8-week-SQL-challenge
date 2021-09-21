@@ -5,7 +5,6 @@ FROM dannys_diner.sales AS s
 JOIN dannys_diner.menu AS m
 ON s.product_id=m.product_id
 GROUP BY customer_id;
---C spends $36, B spends $74 and A spends $76
 
 --2. How many days has each customer visited the restaurant?
 SELECT customer_id, 
@@ -14,7 +13,6 @@ FROM dannys_diner.sales AS s
 JOIN dannys_diner.menu AS m
 ON s.product_id=m.product_id
 GROUP BY customer_id;
---A visited the restaurant in 4 days, B visited the restaurant in 6 days and C visited the restaurant in 2 days
 
 --3. What was the first item from the menu purchased by each customer?
 WITH first_item AS 
@@ -30,7 +28,6 @@ ON s.product_id=m.product_id
 SELECT *
 FROM first_item
 WHERE ranks=1;
---The first item A purchased are curry and sushi, B purchased curry first and C purchased ramen first
 
 --4. What is the most purchased item on the menu and how many times was it purchased by all customers?
 SELECT product_name, 
@@ -40,8 +37,6 @@ JOIN dannys_diner.menu AS m
 ON s.product_id=m.product_id
 GROUP BY product_name
 ORDER BY COUNT(s.product_id) DESC;
---Ramen is the most purchased item on the menu and it was purchased 8 times by customers
-
 
 --5. Which item was the most popular for each customer?
 WITH popular_item AS 
@@ -77,7 +72,6 @@ WHERE order_date>=join_date
 SELECT *
 FROM first_after_member
 WHERE ranks=1;
---Curry is the first item that A purchased after becoming a member, B purchase sushi first after B became a member
 
 --7. Which item was purchased just before the customer became a member?
 WITH item_before_member AS 
@@ -95,7 +89,6 @@ WHERE order_date < join_date)
 SELECT *
 FROM item_before_member
 WHERE ranks=1;
---A purchased sushi and curry just before becoming a member, B purchased sushi just before becoming a member of the restaurant
 
 --8. What is the total items and amount spent for each member before they became a member?
 SELECT s.customer_id, 
@@ -108,7 +101,6 @@ JOIN dannys_diner.members AS me
 ON s.customer_id=me.customer_id
 WHERE order_date<join_date
 GROUP BY s.customer_id;
---A spends $25 for 2 items (carry and sushi) before becoming a member, B spends $40 for 2 items (sushi) before becoming a member
 
 --9. If each $1 spent equates to 10 points and sushi has a 20 points multiplier - how many points would each customer have?
 WITH bill AS 
@@ -126,8 +118,6 @@ FROM bill
 JOIN dannys_diner.sales AS s
 ON da.product_id=s.product_id
 GROUP BY customer_id;
---A will has 1420 points, followed by B with 1280 poitns whereas C has lowest point with only 720
-
 
 --Join All The Things--
 SELECT m.customer_id, 
