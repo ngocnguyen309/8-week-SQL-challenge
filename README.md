@@ -1,14 +1,19 @@
 # 8-week-SQL-challenge
 
-### CASE STUDY#1 - Dannys's Dinner
+### :green_book: TABLE OF CONTENTS
+* [Case study#1 - Dannys's Dinner](https://8weeksqlchallenge.com/case-study-1/)
+* [Case study#2 - Pizza Runner](https://8weeksqlchallenge.com/case-study-2/)
+* [Case study#3 - Foodie Fi](https://8weeksqlchallenge.com/case-study-3/)
+* [Case study#4 - Data Bank](https://8weeksqlchallenge.com/case-study-4/)
+
+
+> ### CASE STUDY#1 - Dannys's Dinner
 
 ![1](https://user-images.githubusercontent.com/89729029/134104581-4cffc884-99c3-4a8f-bca1-283e0b2dd89f.png)
 
-Danny seriously loves Japanese food so in the beginning of 2021, he decides to embark upon a risky venture and opens up a cute little restaurant that sells his 3 favourite foods: sushi, curry and ramen.
+Danny wants to use the data to answer a few simple questions about his customers, especially about their visiting patterns, how much money they’ve spent and also which menu items are their favourite. Having this deeper connection with his customers will help him deliver a better and more personalised experience for his loyal customers.
 
-Danny’s Diner is in need of your assistance to help the restaurant stay afloat - the restaurant has captured some very basic data from their few months of operation but have no idea how to use their data to help them run the business.
-
-### CASE STUDY#2 - Pizza Runner
+> ### CASE STUDY#2 - Pizza Runner
 
 ![2](https://user-images.githubusercontent.com/89729029/134104741-1eb6368f-7f86-4b97-8def-fbfb3cfce475.png)
 
@@ -20,17 +25,13 @@ Danny was sold on the idea, but he knew that pizza alone was not going to help h
 
 Danny started by recruiting “runners” to deliver fresh pizza from Pizza Runner Headquarters (otherwise known as Danny’s house) and also maxed out his credit card to pay freelance developers to build a mobile app to accept orders from customers.
 
-### CASE STUDY#3 - Foodie Fi
+> ### CASE STUDY#3 - Foodie Fi
 
 ![3](https://user-images.githubusercontent.com/89729029/134104875-689e3c32-f7de-494d-9c51-1883a6023efa.png)
 
-Subscription based businesses are super popular and Danny realised that there was a large gap in the market - he wanted to create a new streaming service that only had food related content - something like Netflix but with only cooking shows!
-
-Danny finds a few smart friends to launch his new startup Foodie-Fi in 2020 and started selling monthly and annual subscriptions, giving their customers unlimited on-demand access to exclusive food videos from around the world!
-
 Danny created Foodie-Fi with a data driven mindset and wanted to ensure all future investment decisions and new features were decided using data. This case study focuses on using subscription style digital data to answer important business questions.
 
-### CASE STUDY#4 -  Data Bank
+> ### CASE STUDY#4 -  Data Bank
 
 ![4](https://user-images.githubusercontent.com/89729029/134105013-cf565c31-99cb-4358-bde2-b577325977f9.png)
 
