@@ -211,4 +211,4 @@ HAVING ROUND((next_balance-closing_balance)/closing_balance,2) > 5
 SELECT 100* COUNT(customer_id)::NUMERIC/(SELECT COUNT(DISTINCT customer_id) FROM question5 WHERE end_month='2020-01-31')
 FROM balance_changes
 ```
--7% of customers increase their closing balance by more than 5% in the following month
+- 7% of customers increase their closing balance by more than 5% in the following month
