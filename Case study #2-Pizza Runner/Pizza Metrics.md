@@ -1,4 +1,4 @@
-__1 How many pizzas were ordered?__
+__1. How many pizzas were ordered?__
 ```
 SELECT COUNT(pizza_id) AS total
 FROM pizza_runner.customer_orders;
@@ -7,7 +7,7 @@ FROM pizza_runner.customer_orders;
 
 - There are 14 pizzas ordered
 
-__2 How many unique customer orders were made?__
+__2. How many unique customer orders were made?__
 ```
 SELECT COUNT(DISTINCT order_id) AS total_order
 FROM pizza_runner.customer_orders;
@@ -16,7 +16,7 @@ FROM pizza_runner.customer_orders;
 
 - There are 10 unique orders made
 
-__3 How many successful orders were delivered by each runner?__
+__3. How many successful orders were delivered by each runner?__
 ```
 SELECT runner_id, 
        COUNT(*) AS total_order
@@ -30,7 +30,7 @@ GROUP BY runner_id;
 - id_2 has 3 sucessful orders 
 - id_3 has only 1 sucessful order
 
-__4 How many of each type of pizza was delivered?__
+__4. How many of each type of pizza was delivered?__
 ```
 SELECT pizza_name, 
        COUNT (p.pizza_id)
@@ -46,7 +46,7 @@ GROUP BY pizza_name;
 
 - 9 "MeatLovers" pizza and 3 "Vegetatrian" pizza were delivered sucessfully to customers
 
-__5 How many Vegetarian and Meatlovers were ordered by each customer?__
+__5. How many Vegetarian and Meatlovers were ordered by each customer?__
 ```
 SELECT customer_id, 
        SUM (CASE WHEN c.pizza_id=1 THEN 1 ELSE 0 END) AS Meat_Lovers, 
@@ -61,7 +61,7 @@ ORDER BY customer_id;
 ```
 ![image](https://user-images.githubusercontent.com/89729029/134182007-8a5518b4-6829-49e2-8ec5-175d381a5bb0.png)
 
-__6 What was the maximum number of pizzas delivered in a single order?__
+__6. What was the maximum number of pizzas delivered in a single order?__
 ```
 SELECT r.order_id, 
        COUNT (pizza_id) as number_pizzas
@@ -76,7 +76,7 @@ ORDER BY COUNT (pizza_id) DESC;
 
 - The maximum number of pizzas delivered in a single order are 3 pizzas
 
-__7 For each customer, how many delivered pizzas had at least 1 change and how many had no changes?__
+__7. For each customer, how many delivered pizzas had at least 1 change and how many had no changes?__
 ```
 WITH pizza_change AS 
 (
@@ -103,7 +103,7 @@ ORDER BY customer_id;
 ```
 ![image](https://user-images.githubusercontent.com/89729029/134182640-6a0a0770-921b-446f-84c6-5a3118efebba.png)
 
-__8 How many pizzas were delivered that had both exclusions and extras?__
+__8. How many pizzas were delivered that had both exclusions and extras?__
 ```
 WITH pizza_both AS 
 (
@@ -130,7 +130,7 @@ GROUP BY customer_id, order_id;
 
 - Only order #10 of customer_id 103 had both exclusions and extras
 
-__9 What was the total volume of pizzas ordered for each hour of the day?__
+__9. What was the total volume of pizzas ordered for each hour of the day?__
 ```
 SELECT DATE_PART('hour',order_time) AS hours, 
        COUNT(*) AS number_pizzas
