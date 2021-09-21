@@ -32,6 +32,7 @@ Danny created Foodie-Fi with a data driven mindset and wanted to ensure all futu
 
 ### CASE STUDY#4 -  Data Bank
 
+![4](https://user-images.githubusercontent.com/89729029/134105013-cf565c31-99cb-4358-bde2-b577325977f9.png)
 
 There is a new innovation in the financial industry called Neo-Banks: new aged digital only banks without physical branches.
 
