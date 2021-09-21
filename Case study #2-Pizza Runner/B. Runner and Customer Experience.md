@@ -1,12 +1,15 @@
 __1. How many runners signed up for each 1 week period?__
 ```
-SELECT DATEPART(week, CAST(registration_date AS date)) AS weeks, 
-       COUNT(runner_id) AS total
-FROM runners
-GROUP BY DATEPART(week, CAST(registration_date AS date))
+SELECT DATE_PART('week', registration_date) AS week,
+	DATE_PART('isoyear', registration_date) AS year, 
+       COUNT(runner_id) AS total_runners
+FROM pizza_runner.runners
+GROUP BY DATE_PART('week', registration_date), DATE_PART('isoyear', registration_date)
+ORDER BY DATE_PART('isoyear', registration_date)
 ```
+![image](https://user-images.githubusercontent.com/89729029/134192354-bcb4f0e0-c032-4d4d-a2e1-20e385bfda0f.png)
 
-__2 What was the average time in minutes it took for each runner to arrive at the Pizza Runner HQ to pickup the order?__
+__2. What was the average time in minutes it took for each runner to arrive at the Pizza Runner HQ to pickup the order?__
 ```
 WITH average_time AS 
 (
