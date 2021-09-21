@@ -13,6 +13,8 @@
 
 Danny wants to use the data to answer a few simple questions about his customers, especially about their visiting patterns, how much money they’ve spent and also which menu items are their favourite. Having this deeper connection with his customers will help him deliver a better and more personalised experience for his loyal customers.
 
+Here is my [answer](https://github.com/ngocnguyen309/8-week-SQL-challenge/tree/main/Case%20study%20%231-Danny's%20Dinner) 
+
 > ### CASE STUDY#2 - Pizza Runner
 
 ![2](https://user-images.githubusercontent.com/89729029/134104741-1eb6368f-7f86-4b97-8def-fbfb3cfce475.png)
@@ -46,3 +48,5 @@ Customers are allocated cloud data storage limits which are directly linked to h
 The management team at Data Bank want to increase their total customer base - but also need some help tracking just how much data storage their customers will need.
 
 This case study is all about calculating metrics, growth and helping the business analyse their data in a smart way to better forecast and plan for their future developments!
+
+Here is my [answer](https://github.com/ngocnguyen309/8-week-SQL-challenge/tree/main/Case%20study%20%234-Data%20Bank)
