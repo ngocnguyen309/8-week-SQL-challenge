@@ -1,12 +1,10 @@
 --1 How many pizzas were ordered?
 SELECT COUNT(pizza_id) 
 FROM pizza_runner.customer_orders;
---There are 14 pizzas ordered
 
 --2 How many unique customer orders were made?
 SELECT COUNT(DISTINCT order_id) 
 FROM pizza_runner.customer_orders;
---There are 10 unique orders made
 
 --3 How many successful orders were delivered by each runner?
 SELECT runner_id, 
@@ -14,9 +12,6 @@ SELECT runner_id,
 FROM pizza_runner.runner_orders
 WHERE distance IS NOT NULL
 GROUP BY runner_id;
---id_1 has 4 sucessful orders
---id_2 has 3 sucessful orders 
---id_3 has only 1 sucessful order
 
 --4 How many of each type of pizza was delivered?
 SELECT pizza_name, 
@@ -28,7 +23,6 @@ JOIN pizza_runner.pizza_names AS p
 ON p.pizza_id=c.pizza_id
 WHERE distance IS NOT NULL
 GROUP BY pizza_name;
---9 "MeatLovers" pizza and 3 "Vegetatrian" pizza were delivered sucessfully to customers
 
 --5 How many Vegetarian and Meatlovers were ordered by each customer?
 SELECT customer_id, 
@@ -41,11 +35,6 @@ JOIN pizza_runner.pizza_names AS p
 ON p.pizza_id=c.pizza_id
 GROUP BY customer_id
 ORDER BY customer_id;
---customer_id 101 ordered 2 "Meatlovers" pizza and 1 "Vegetarian" pizza
---customer_id 102 ordered 2 "Meatlovers" pizza  and 1 "Vegetarian" pizza
---customer_id 103 ordered 3 "Meatlovers" pizza  and 1 "Vegetarian" pizza
---customer_id 104 ordered 3 "Meatlovers" pizza 
---customer_id 105 order 1 "Vegetarian" pizza
 
 --6 What was the maximum number of pizzas delivered in a single order?
 SELECT r.order_id, 
@@ -56,7 +45,6 @@ ON r.order_id=c.order_id
 WHERE distance IS NOT NULL
 GROUP BY r.order_id
 ORDER BY COUNT (pizza_id) DESC;
---The maximum number of pizzas delivered in a single order are 3 pizzas
 
 --7 For each customer, how many delivered pizzas had at least 1 change and how many had no changes?
 WITH pizza_change AS 
@@ -82,13 +70,6 @@ FROM pizza_change
 GROUP BY customer_id, order_id
 ORDER BY customer_id;
 
-customer_id	no_changes	had_1_changes
-101	            2	           0
-102	            3	           0
-103	            0	           3
-104	            1	           2
-105	            0	           1
-
 --8 How many pizzas were delivered that had both exclusions and extras?
 WITH pizza_both AS 
 (
@@ -110,15 +91,12 @@ FROM pizza_both
 WHERE (exclusions_after <> '' 
 AND extras_after<>'')
 GROUP BY customer_id, order_id;
---Only order #10 of customer_id 103 had both exclusions and extras
 
 --9 What was the total volume of pizzas ordered for each hour of the day?
 SELECT DATE_PART('hour',order_time) AS hours, 
        COUNT(*) AS number_pizzas
 FROM pizza_runner.customer_orders
 GROUP BY DATE_PART('hour',order_time);
--- Highest volume of pizza ordered is at 13, 18 and 21 
--- Lowest volume of pizza ordered is at 11, 19 and 23 
 
 --10. What was the volume of orders for each day of the week?
 SELECT DATE_PART('day',order_time) AS days, 
