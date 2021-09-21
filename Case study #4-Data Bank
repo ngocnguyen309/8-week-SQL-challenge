@@ -1,3 +1,5 @@
+100. First list item
+     - First nested list item
 A. Customer Nodes Exploration
 --1. How many unique nodes are there on the Data Bank system?
 SELECT COUNT(distinct node_id) 
