@@ -1,4 +1,4 @@
-_A. Customer Nodes Exploration_
+A. Customer Nodes Exploration
 --1. How many unique nodes are there on the Data Bank system?
 SELECT COUNT(distinct node_id) 
 FROM data_bank.customer_nodes;
