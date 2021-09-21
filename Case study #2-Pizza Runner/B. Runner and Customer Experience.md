@@ -14,18 +14,18 @@ __2. What was the average time in minutes it took for each runner to arrive at t
 WITH average_time AS 
 (
 SELECT runner_id, 
-       CAST(pickup_time AS datetime) AS pickup_times, 
-       CAST(order_time AS datetime) AS order_times
-FROM runner_orders AS r
-JOIN customer_orders AS c
+       CAST(pickup_time AS timestamp) AS pickup_times, 
+       CAST(order_time AS timestamp) AS order_times
+FROM pizza_runner.runner_orders AS r
+JOIN pizza_runner.customer_orders AS c
 ON r.order_id=c.order_id
 WHERE distance <> ''
+AND pickup_time not like 'null'
 )
-SELECT runner_id, 
-       AVG(DATEDIFF(minute, order_times, pickup_times)) AS mintues
+SELECT AVG(EXTRACT(minute FROM (pickup_times-order_times))) AS minutes
 FROM average_time
-GROUP BY runner_id
 ```
+![image](https://user-images.githubusercontent.com/89729029/134194460-8282cc1e-942c-413c-acd0-eb24e4700a08.png)
 
 __3 Is there any relationship between the number of pizzas and how long the order takes to prepare?__
 ```
