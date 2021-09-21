@@ -2,7 +2,6 @@ A. Customer Nodes Exploration
 --1. How many unique nodes are there on the Data Bank system?
 SELECT COUNT(distinct node_id) 
 FROM data_bank.customer_nodes;
---There are 5 unique nodes on tha Data Bank system
 
 --2. What is the number of nodes per region?
 SELECT r.region_id, 
@@ -12,7 +11,6 @@ FROM data_bank.customer_nodes AS c
 JOIN data_bank.regions AS r
 ON c.region_id=r.region_id
 GROUP BY r.region_id,region_name;
---
 
 --3. How many customers are allocated to each region?
 SELECT region_name,
@@ -23,8 +21,6 @@ JOIN data_bank.regions as r
 ON c.region_id=r.region_id
 GROUP BY region_name,r.region_id
 ORDER BY COUNT(distinct customer_id) DESC;
---Australia has the highest number of unique users
---Europe has the smallest unique users
 
 --4. How many days on average are customers reallocated to a different node?
 WITH node as 
@@ -50,7 +46,6 @@ GROUP BY customer_id, node_id
 
 SELECT AVG(total_diff) AS avg_day
 FROM sum_diff
---On average, customers are reallocated to a different node every 23.56 days
 
 --5. What is the median, 80th and 95th percentile for this same reallocation days metric for each region?
 updating...
@@ -63,7 +58,6 @@ SELECT txn_type AS type_bank,
 FROM data_bank.customer_transactions
 GROUP BY txn_type
 ORDER BY count(*)
---Deposit type has the largest number of transactions and total value
 
 --2. What is the average total historical deposit counts and amounts for all customers?
 WITH average_total AS
@@ -80,8 +74,6 @@ SELECT AVG(transactions) AS avg_trans,
        AVG(amount) AS avg_value
 FROM average_total
 WHERE type_bank='deposit'
---The average total historical deposit count is 5.3
---Average total historical deposit amount is 508.6
 
 --3. For each month - how many Data Bank customers make more than 1 deposit and either 1 purchase or 1 withdrawal in a single month?
 WITH da as 
@@ -100,12 +92,6 @@ FROM da
 WHERE deposit>1 
 AND (purchase>1 OR withdrawal>1)
 GROUP BY months
-
-months	   customer_count
-1	   88
-2	   115
-3	   137
-4	   40
 
 --4. What is the closing balance for each customer at the end of the month?
 WITH monthly_change AS 
@@ -241,4 +227,3 @@ HAVING ROUND((next_balance-closing_balance)/closing_balance,2) > 5
 
 SELECT 100* COUNT(customer_id)::NUMERIC/(SELECT COUNT(DISTINCT customer_id) FROM question5 WHERE end_month='2020-01-31')
 FROM balance_changes
---7% of customers increase their closing balance by more than 5% in the following month
