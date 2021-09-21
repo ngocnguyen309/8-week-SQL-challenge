@@ -1,0 +1,244 @@
+A. Customer Nodes Exploration
+--1. How many unique nodes are there on the Data Bank system?
+SELECT COUNT(distinct node_id) 
+FROM data_bank.customer_nodes;
+--There are 5 unique nodes on tha Data Bank system
+
+--2. What is the number of nodes per region?
+SELECT r.region_id, 
+       region_name, 
+       COUNT(node_id) 
+FROM data_bank.customer_nodes AS c
+JOIN data_bank.regions AS r
+ON c.region_id=r.region_id
+GROUP BY r.region_id,region_name;
+--
+
+--3. How many customers are allocated to each region?
+SELECT region_name,
+       r.region_id, 
+       COUNT(distinct customer_id) 
+FROM data_bank.customer_nodes as c
+JOIN data_bank.regions as r
+ON c.region_id=r.region_id
+GROUP BY region_name,r.region_id
+ORDER BY COUNT(distinct customer_id) DESC;
+--Australia has the highest number of unique users
+--Europe has the smallest unique users
+
+--4. How many days on average are customers reallocated to a different node?
+WITH node as 
+(
+SELECT customer_id, 
+       node_id, 
+       start_date, 
+       end_date,
+       end_date - start_date AS diff
+FROM data_bank.customer_nodes
+WHERE end_date<>'9999-12-31'
+GROUP BY customer_id, node_id, start_date, end_date
+ORDER BY customer_id, node_id
+),
+    sum_diff as 
+(
+SELECT customer_id, 
+       node_id, 
+       SUM(diff) AS total_diff
+FROM node
+GROUP BY customer_id, node_id
+)
+
+SELECT AVG(total_diff) AS avg_day
+FROM sum_diff
+--On average, customers are reallocated to a different node every 23.56 days
+
+--5. What is the median, 80th and 95th percentile for this same reallocation days metric for each region?
+updating...
+
+B. Customer Transactions
+--1. What is the unique count and total amount for each transaction type?
+SELECT txn_type AS type_bank, 
+       COUNT(*) AS transactions, 
+       SUM(txn_amount) AS amount
+FROM data_bank.customer_transactions
+GROUP BY txn_type
+ORDER BY count(*)
+--Deposit type has the largest number of transactions and total value
+
+--2. What is the average total historical deposit counts and amounts for all customers?
+WITH average_total AS
+(
+SELECT customer_id, 
+       txn_type AS type_bank, 
+       COUNT(*) AS transactions, 
+       AVG(txn_amount) AS amount
+FROM data_bank.customer_transactions
+GROUP BY customer_id, txn_type
+)
+
+SELECT AVG(transactions) AS avg_trans,
+       AVG(amount) AS avg_value
+FROM average_total
+WHERE type_bank='deposit'
+--The average total historical deposit count is 5.3
+--Average total historical deposit amount is 508.6
+
+--3. For each month - how many Data Bank customers make more than 1 deposit and either 1 purchase or 1 withdrawal in a single month?
+WITH da as 
+(
+SELECT DATE_PART('month',txn_date) AS months, 
+       customer_id, 
+       SUM(CASE WHEN txn_type='deposit' THEN 1 ELSE 0 END) AS deposit, 
+  	SUM(CASE WHEN txn_type='purchase' THEN 1 ELSE 0 END) AS purchase, 
+  	SUM(CASE WHEN txn_type='withdrawal' THEN 1 ELSE 0 END) AS withdrawal
+FROM data_bank.customer_transactions
+GROUP BY DATE_PART('month',txn_date), customer_id
+)
+
+SELECT months, COUNT(distinct customer_id) AS customer_count
+FROM da
+WHERE deposit>1 
+AND (purchase>1 OR withdrawal>1)
+GROUP BY months
+
+months	   customer_count
+1	   88
+2	   115
+3	   137
+4	   40
+
+--4. What is the closing balance for each customer at the end of the month?
+WITH monthly_change AS 
+(
+SELECT customer_id, 
+       txn_type,
+       (DATE_TRUNC('month',txn_date) + '1 month - 1 day'::INTERVAL) AS end_of_month,
+       SUM (CASE WHEN txn_type ='deposit' THEN txn_amount ELSE (-txn_amount) END) AS amount
+FROM data_bank.customer_transactions
+GROUP BY customer_id, 
+         txn_type,
+         DATE_TRUNC('month',txn_date) + '1 month - 1 day'::INTERVAL
+),
+ending_month AS
+(SELECT DISTINCT customer_id,
+        ('2020-01-31'::DATE + GENERATE_SERIES(0,3)*'1 MONTH'::interval) AS end_month
+FROM data_bank.customer_transactions
+),
+closing AS
+(
+SELECT e.customer_id, 
+       end_month, 
+       COALESCE(amount,0) AS monthly_changes, 
+       SUM(amount) OVER(PARTITION BY e.customer_id ORDER BY end_month ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS closing_balance
+FROM ending_month as e
+LEFT JOIN monthly_change as m
+on m.end_of_month=e.end_month
+and m.customer_id=e.customer_id
+),
+solution AS 
+(
+SELECT customer_id,
+       end_month,
+       monthly_changes,
+       closing_balance,
+       ROW_NUMBER() OVER (PARTITION BY customer_id, end_month ORDER BY end_month) AS record_no
+FROM closing
+),
+solution1 AS 
+(
+SELECT customer_id,
+       end_month, 
+       monthly_changes, 
+       closing_balance,
+       LEAD(record_no) OVER (PARTITION BY customer_id, end_month ORDER BY end_month) AS lead_no
+FROM solution
+)
+SELECT customer_id, 
+       end_month,
+       monthly_changes, 
+       closing_balance
+FROM solution1
+WHERE lead_no IS NULL
+
+-- 5. What is the percentage of customers who increase their closing balance by more than 5%?
+WITH monthly_change AS 
+(
+SELECT customer_id, 
+       txn_type,
+       (DATE_TRUNC('month',txn_date) + '1 month - 1 day'::INTERVAL) AS end_of_month,
+       SUM (CASE WHEN txn_type ='deposit' THEN txn_amount ELSE (-txn_amount) END) AS amount
+FROM data_bank.customer_transactions
+GROUP BY customer_id, 
+         txn_type,
+         DATE_TRUNC('month',txn_date) + '1 month - 1 day'::INTERVAL
+),
+ending_month AS
+(SELECT DISTINCT customer_id,
+        ('2020-01-31'::DATE + GENERATE_SERIES(0,3)*'1 MONTH'::interval) AS end_month
+FROM data_bank.customer_transactions
+),
+closing AS
+(
+SELECT e.customer_id, 
+       end_month, 
+       COALESCE(amount,0) AS monthly_changes, 
+       SUM(amount) OVER(PARTITION BY e.customer_id ORDER BY end_month ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS closing_balance
+FROM ending_month as e
+LEFT JOIN monthly_change as m
+on m.end_of_month=e.end_month
+and m.customer_id=e.customer_id
+),
+solution AS 
+(
+SELECT customer_id,
+       end_month,
+       monthly_changes,
+       closing_balance,
+       ROW_NUMBER() OVER (PARTITION BY customer_id, end_month ORDER BY end_month) AS record_no
+FROM closing
+),
+solution1 AS 
+(
+SELECT customer_id,
+       end_month, 
+       monthly_changes, 
+       closing_balance,
+       LEAD(record_no) OVER (PARTITION BY customer_id, end_month ORDER BY end_month) AS lead_no
+FROM solution
+),
+question4 AS
+(
+SELECT customer_id, 
+       end_month,
+       monthly_changes, 
+       closing_balance
+FROM solution1
+WHERE lead_no IS NULL
+),
+question5 AS 
+(
+SELECT customer_id,
+       end_month,
+       closing_balance,
+       LEAD(closing_balance) OVER(PARTITION BY customer_id ORDER BY end_month) AS next_balance
+FROM question4
+),
+balance_changes AS 
+(
+SELECT customer_id, 
+	end_month, 
+       ROUND((next_balance-closing_balance)/closing_balance,2) as changes
+FROM question5
+WHERE (next_balance IS NOT NULL)
+AND closing_balance <> 0
+AND end_month='2020-01-31'
+GROUP BY customer_id, 
+         end_month, 
+         next_balance, 
+         closing_balance
+HAVING ROUND((next_balance-closing_balance)/closing_balance,2) > 5
+)
+
+SELECT 100* COUNT(customer_id)::NUMERIC/(SELECT COUNT(DISTINCT customer_id) FROM question5 WHERE end_month='2020-01-31')
+FROM balance_changes
+--7% of customers increase their closing balance by more than 5% in the following month
