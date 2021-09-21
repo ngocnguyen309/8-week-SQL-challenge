@@ -14,5 +14,4 @@ FROM pizza_runner.customer_orders;
 ```
 ![image](https://user-images.githubusercontent.com/89729029/134159476-3b4c78cb-9503-4ab4-86bb-f41ee1e1fc52.png)
 
-### Customer_transactions
 
