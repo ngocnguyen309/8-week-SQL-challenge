@@ -3,6 +3,7 @@ A. Customer Nodes Exploration
 SELECT COUNT(distinct node_id) 
 FROM data_bank.customer_nodes;
 --There are 5 unique nodes on tha Data Bank system
+https://picc.io/Pd9ISQm.jpeg
 
 --2. What is the number of nodes per region?
 SELECT r.region_id, 
