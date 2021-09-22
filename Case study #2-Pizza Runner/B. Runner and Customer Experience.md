@@ -103,8 +103,9 @@ ORDER BY r.runner_id,
 
 __7 What is the successful delivery percentage for each runner?__
 ```
-SELECT runner_id, 
-       CAST(SUM(CASE WHEN duration ='' THEN 0 ELSE 1 END) AS float)/CAST(COUNT(order_id) AS float)*100 AS percentage
-FROM runner_orders
-GROUP BY runner_id
+SELECT r.runner_id, 
+       CAST(SUM(CASE WHEN pickup_times='' THEN 0 ELSE 1 END) AS FLOAT)/COUNT(DISTINCT order_id) AS percentage_delivery      
+FROM runner_orders_temp AS r
+GROUP BY r.runner_id;
 ```
+![image](https://user-images.githubusercontent.com/89729029/134286161-3cfc703c-b19e-4639-99dc-007ee6509078.png)
