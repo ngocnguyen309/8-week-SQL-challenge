@@ -56,18 +56,28 @@ GROUP BY number_pizza
 __4. What was the average distance travelled for each customer?__
 ```
 SELECT customer_id, 
-       ROUND(AVG(CAST(distance AS float)),2) AS avg_distance
-FROM runner_orders AS r
-JOIN customer_orders AS c
+       AVG(CAST(distances AS float)) AS avg_distance
+FROM runner_orders_temp AS r
+JOIN customer_orders_temp AS c
 ON r.order_id=c.order_id
+WHERE pickup_times <>''
 GROUP BY customer_id
 ```
+![image](https://user-images.githubusercontent.com/89729029/134282535-785cfdb2-c3aa-4dac-8c26-e7515a323fc5.png)
 
 __5. What was the difference between the longest and shortest delivery times for all orders?__
 ```
-SELECT MAX(cast(duration as float))-min(cast(duration as float)) as dif_delivery_times
-FROM runner_orders
+SELECT max(delivery_time)-min(delivery_time) AS difference
+FROM (
+SELECT r.order_id, 
+       EXTRACT (minute FROM (CAST(pickup_times AS timestamp)-order_time)) AS delivery_time
+FROM runner_orders_temp AS r
+JOIN customer_orders_temp AS c
+ON r.order_id=c.order_id
+WHERE pickup_times <>''
+GROUP BY r.order_id, pickup_times, order_time) AS sub                          
 ```
+![image](https://user-images.githubusercontent.com/89729029/134283353-ab1d8329-93a5-477f-b0f5-94461beb1131.png)
 
 __6. What was the average speed for each runner for each delivery and do you notice any trend for these values?__
 ```
