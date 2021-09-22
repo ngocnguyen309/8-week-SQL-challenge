@@ -1,7 +1,7 @@
 __1. How many runners signed up for each 1 week period?__
 ```
 SELECT DATE_PART('week', registration_date) AS week,
-	DATE_PART('isoyear', registration_date) AS year, 
+       DATE_PART('isoyear', registration_date) AS year, 
        COUNT(runner_id) AS total_runners
 FROM pizza_runner.runners
 GROUP BY DATE_PART('week', registration_date), DATE_PART('isoyear', registration_date)
@@ -27,27 +27,33 @@ FROM average_time
 ```
 ![image](https://user-images.githubusercontent.com/89729029/134194460-8282cc1e-942c-413c-acd0-eb24e4700a08.png)
 
-__3 Is there any relationship between the number of pizzas and how long the order takes to prepare?__
+__3. Is there any relationship between the number of pizzas and how long the order takes to prepare?__
 ```
-WITH da AS
+WITH pizza_and_preparation AS
 (
-SELECT r.order_id, 
-       COUNT(pizza_id) AS number_pizzas, 
-       CAST(pickup_time AS datetime) AS pickup_times, cast(order_time as datetime) as order_times
-FROM runner_orders AS r
-JOIN customer_orders AS c
-ON r.order_id=c.order_id
-WHERE distance <> ''
-GROUP BY r.order_id, 
-         pickup_time, 
-         order_time)
-SELECT number_pizzas, 
-       AVG(DATEDIFF(minute, order_times, pickup_times)) AS minutes
-FROM da
-GROUP BY number_pizzas
+SELECT c.order_id, 
+	   count(pizza_id) as number_pizza, 
+       order_time,
+       pickup_time,
+       EXTRACT (minute FROM (CAST(pickup_time AS timestamp)-order_time)) AS minutes
+FROM pizza_runner.customer_orders AS c
+JOIN pizza_runner.runner_orders AS r
+ON c.order_id=r.order_id
+WHERE pickup_time not like 'null'
+GROUP BY c.order_id,
+       order_time,
+       pickup_time)
+SELECT number_pizza,
+       AVG(minutes)
+FROM pizza_and_preparation
+GROUP BY number_pizza
 ``` 
+![image](https://user-images.githubusercontent.com/89729029/134276662-fd216a52-d6a3-4f04-98f0-581441d3ba37.png)
 
-__4 What was the average distance travelled for each customer?__
+- On average, a pizza takes 12 minutes to prepare.
+- It takes 18 minutes to prepare 2 pizzas, which means 9 minutes per pizza.
+
+__4. What was the average distance travelled for each customer?__
 ```
 SELECT customer_id, 
        ROUND(AVG(CAST(distance AS float)),2) AS avg_distance
@@ -57,7 +63,7 @@ ON r.order_id=c.order_id
 GROUP BY customer_id
 ```
 
-__5 What was the difference between the longest and shortest delivery times for all orders?__
+__5. What was the difference between the longest and shortest delivery times for all orders?__
 ```
 SELECT MAX(cast(duration as float))-min(cast(duration as float)) as dif_delivery_times
 FROM runner_orders
