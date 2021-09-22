@@ -81,13 +81,26 @@ GROUP BY r.order_id, pickup_times, order_time) AS sub
 
 __6. What was the average speed for each runner for each delivery and do you notice any trend for these values?__
 ```
-SELECT runner_id, 
-       avg(cast(distance as float)/cast (duration as float)) as average_speed
-FROM runner_orders
-WHERE duration<>''
-GROUP BY runner_id
-ORDER BY avg(cast(distance as float)/cast (duration as float)) desc
+SELECT r.runner_id, 
+       r.order_id,
+       COUNT(pizza_id) AS total_pizza,
+       CAST(distances AS float)/CAST(durations AS float)*60 AS speed
+FROM runner_orders_temp AS r
+JOIN customer_orders_temp AS c
+ON r.order_id=c.order_id
+WHERE pickup_times <>''
+GROUP BY r.runner_id, 
+	 r.order_id, 
+	 distances, 
+	 durations
+ORDER BY r.runner_id, 
+	 CAST(distances AS float)/CAST(durations AS float)
 ```
+![image](https://user-images.githubusercontent.com/89729029/134284900-a1c47bd4-7adb-4231-a75e-6db758386d34.png)
+- Average speed of runner 1 is from 37.5 km/h to 60 km/h
+- Average speed of runner 2 is from 35.09 km/h to 93.6 km/h
+- Average speed of runner 3 is 40 km/h
+
 __7 What is the successful delivery percentage for each runner?__
 ```
 SELECT runner_id, 
