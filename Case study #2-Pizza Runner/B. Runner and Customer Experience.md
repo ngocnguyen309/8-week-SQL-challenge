@@ -101,7 +101,7 @@ ORDER BY r.runner_id,
 - Average speed of runner 2 is from 35.09 km/h to 93.6 km/h
 - Average speed of runner 3 is 40 km/h
 
-__7 What is the successful delivery percentage for each runner?__
+__7. What is the successful delivery percentage for each runner?__
 ```
 SELECT r.runner_id, 
        CAST(SUM(CASE WHEN pickup_times='' THEN 0 ELSE 1 END) AS FLOAT)/COUNT(DISTINCT order_id) AS percentage_delivery      
