@@ -70,17 +70,49 @@ WITH after_trial AS
 SELECT customer_id,
        plan_id,
        LEAD(plan_id) OVER(PARTITION BY customer_id ORDER BY plan_id) AS next_plan
-FROM foodie_fi.subscriptions)
+FROM foodie_fi.subscriptions
+)
 
 SELECT next_plan, 
        COUNT(customer_id) AS customer,
-       ROUND((100*COUNT(customer_id):: NUMERIC/(SELECT COUNT(*) FROM foodie_fi.subscriptions)),3) AS percentage
+       ROUND((100*COUNT(customer_id):: NUMERIC/(SELECT COUNT(DISTINCT customer_id) FROM foodie_fi.subscriptions)),3) AS percentage
 FROM after_trial
 GROUP BY next_plan
 HAVING next_plan IS NOT NULL
 ORDER BY next_plan
 ```
-![image](https://user-images.githubusercontent.com/89729029/135290722-6252b47c-9b11-4f15-99be-02f321fcae73.png)
+![image](https://user-images.githubusercontent.com/89729029/135293748-928d8581-b6b5-47c6-abb8-916b032a3905.png)
 
-__6. What is the customer count and percentage breakdown of all 5 plan_name values at 2020-12-31?__
+__7. What is the customer count and percentage breakdown of all 5 plan_name values at 2020-12-31?__
+```
+WITH after_trial AS
+(
+SELECT customer_id,
+       plan_id,
+  	start_date
+FROM foodie_fi.subscriptions
+)
 
+SELECT a.plan_id, 
+	   plan_name, 
+       COUNT(customer_id) AS customer,
+       ROUND((100*COUNT(customer_id)::NUMERIC/(SELECT COUNT(DISTINCT customer_id) FROM after_trial)),2) AS percentage
+FROM after_trial AS a
+JOIN foodie_fi.plans AS p
+ON a.plan_id=p.plan_id
+WHERE start_date<='2020-12-31'
+GROUP BY a.plan_id, plan_name
+ORDER BY a.plan_id
+```
+![image](https://user-images.githubusercontent.com/89729029/135293422-1f8008d8-1623-4c5f-81b0-d41e6765c798.png)
+
+__8. How many customers have upgraded to an annual plan in 2020?__
+```
+SELECT COUNT(DISTINCT customer_id)
+FROM foodie_fi.subscriptions
+WHERE DATE_PART('year',start_date)=2020
+AND plan_id=3
+```
+![image](https://user-images.githubusercontent.com/89729029/135295399-704433fb-14fe-4f27-8e8e-9d7288cf3840.png)
+
+__9. How many days on average does it take for a customer to an annual plan from the day they join Foodie-Fi?__
