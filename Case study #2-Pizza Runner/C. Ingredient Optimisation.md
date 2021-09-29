@@ -13,11 +13,12 @@ __2. What was the most commonly added extra?__
 ```
 WITH temp_tab AS
 (
-  SELECT customer_id, 
-         pizza_id, 
-	  UNNEST(STRING_TO_ARRAY(exclusion,',') :: INT[]) AS exclusion,
-   	  UNNEST(STRING_TO_ARRAY(extra,',') :: INT[]) AS extra 
-FROM customer_orders_temp)
+SELECT customer_id, 
+       pizza_id, 
+       UNNEST(STRING_TO_ARRAY(exclusion,',') :: INT[]) AS exclusion,
+       UNNEST(STRING_TO_ARRAY(extra,',') :: INT[]) AS extra 
+FROM customer_orders_temp
+)
 
 SELECT topping_name, 
        COUNT(extra)
