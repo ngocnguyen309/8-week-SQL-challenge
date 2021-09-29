@@ -46,7 +46,7 @@ FROM pizza_runner.runner_orders;
 - __UNNEST()__: includes a row for each element of the specified array
 ```
 SELECT pizza_id,
-	UNNEST(STRING_TO_ARRAY(toppings,',') :: INT[]) AS topping_id 
+       UNNEST(STRING_TO_ARRAY(toppings,',') :: INT[]) AS topping_id 
 FROM pizza_runner.pizza_recipes;
 ```
 ![image](https://user-images.githubusercontent.com/89729029/135016992-f2d1c44d-52f1-4e3d-8026-90d95d60e6ac.png)
