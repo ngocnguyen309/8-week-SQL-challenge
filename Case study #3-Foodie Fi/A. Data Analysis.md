@@ -64,4 +64,23 @@ AND rank_number=2
 ![image](https://user-images.githubusercontent.com/89729029/135281540-106a672c-f5f5-4e7a-860e-228790f6b0c4.png)
 
 __6. What is the number and percentage of customer plans after their initial free trial?__
+```
+WITH after_trial AS
+(
+SELECT customer_id,
+       plan_id,
+       LEAD(plan_id) OVER(PARTITION BY customer_id ORDER BY plan_id) AS next_plan
+FROM foodie_fi.subscriptions)
+
+SELECT next_plan, 
+       COUNT(customer_id) AS customer,
+       ROUND((100*COUNT(customer_id):: NUMERIC/(SELECT COUNT(*) FROM foodie_fi.subscriptions)),3) AS percentage
+FROM after_trial
+GROUP BY next_plan
+HAVING next_plan IS NOT NULL
+ORDER BY next_plan
+```
+![image](https://user-images.githubusercontent.com/89729029/135290722-6252b47c-9b11-4f15-99be-02f321fcae73.png)
+
+__6. What is the customer count and percentage breakdown of all 5 plan_name values at 2020-12-31?__
 
