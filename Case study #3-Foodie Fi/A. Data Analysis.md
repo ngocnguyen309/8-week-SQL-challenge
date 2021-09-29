@@ -20,7 +20,6 @@ ORDER BY DATE_TRUNC('month',start_date)
 ```
 ![image](https://user-images.githubusercontent.com/89729029/135206900-b16b6088-3c93-4893-8d88-9307203a7698.png)
 
-- March has the highest number of trial accounts.
 
 __3. What plan start_date values occur after the year 2020 for our dataset? Show the breakdown by count of events for each plan_name?__
 ```
