@@ -116,3 +116,28 @@ AND plan_id=3
 ![image](https://user-images.githubusercontent.com/89729029/135295399-704433fb-14fe-4f27-8e8e-9d7288cf3840.png)
 
 __9. How many days on average does it take for a customer to an annual plan from the day they join Foodie-Fi?__
+```
+WITH trial AS
+(
+SELECT customer_id, 
+       plan_id, 
+       start_date
+FROM foodie_fi.subscriptions
+WHERE plan_id=0),
+annual AS
+(
+SELECT customer_id, 
+       plan_id, 
+       start_date AS annual_date
+FROM foodie_fi.subscriptions
+WHERE plan_id=3)
+
+SELECT ROUND(AVG(annual_date-start_date),2) AS average_day
+FROM trial AS t
+JOIN annual AS a
+ON t.customer_id=a.customer_id
+
+```
+![image](https://user-images.githubusercontent.com/89729029/135372960-434ab62f-c153-4fac-bf8c-5853b1774a87.png)
+
+__10. Can you further breakdown this average value into 30 day periods (i.e. 0-30 days, 31-60 days etc)__
