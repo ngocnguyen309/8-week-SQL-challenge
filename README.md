@@ -27,11 +27,15 @@ Danny was sold on the idea, but he knew that pizza alone was not going to help h
 
 Danny started by recruiting “runners” to deliver fresh pizza from Pizza Runner Headquarters (otherwise known as Danny’s house) and also maxed out his credit card to pay freelance developers to build a mobile app to accept orders from customers.
 
+Here is my [answer](https://github.com/ngocnguyen309/8-week-SQL-challenge/tree/main/Case%20study%20%232-Pizza%20Runner)
+
 > ### CASE STUDY#3 - Foodie Fi
 
 ![3](https://user-images.githubusercontent.com/89729029/134104875-689e3c32-f7de-494d-9c51-1883a6023efa.png)
 
 Danny created Foodie-Fi with a data driven mindset and wanted to ensure all future investment decisions and new features were decided using data. This case study focuses on using subscription style digital data to answer important business questions.
+
+Here is my [answer](https://github.com/ngocnguyen309/8-week-SQL-challenge/tree/main/Case%20study%20%233-Foodie%20Fi) 
 
 > ### CASE STUDY#4 -  Data Bank
 
