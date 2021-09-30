@@ -19,8 +19,7 @@ GROUP BY DATE_TRUNC('month',start_date), TO_CHAR(start_date,'Mon')
 ORDER BY DATE_TRUNC('month',start_date)
 ```
 ![image](https://user-images.githubusercontent.com/89729029/135274163-01637fda-f17c-4553-bde9-c97407464255.png)
-- The number of customers signed up to an initial 7 day free trial is highest on March, whereas the least number of customers first signed up the Foodie-Fi on February. 
-- After declining rapidly on February, the number of customers first signing up the Foodie-Fi increased remarkably on March.
+- After declining rapidly on February, the number of customers first signing up the Foodie-Fi service increased remarkably on March.
 
 __3. What plan start_date values occur after the year 2020 for our dataset? Show the breakdown by count of events for each plan_name?__
 ```
@@ -34,6 +33,8 @@ HAVING DATE_PART('year',start_date) > 2020
 ORDER BY COUNT(s.plan_id) DESC
 ```
 ![image](https://user-images.githubusercontent.com/89729029/135208307-fe0610aa-2db7-49bc-91a9-da6ade7e2e5d.png)
+- After 2020, the number of customers continued using their plan is higher the amount of people who cancelled the Foodie-Fi service. 
+- Pro annual plan was the most popular event in all available plan with 63 customers using after 2020.
 
 __4. What is the customer count and percentage of customers who have churned rounded to 1 decimal place?__
 ```
@@ -45,6 +46,7 @@ ON p.plan_id=s.plan_id
 WHERE s.plan_id=4
 ```
 ![image](https://user-images.githubusercontent.com/89729029/135276323-dc488364-675b-4eeb-9475-a320d95982ef.png)
+- The percentage of customers who have cancelled the service was 30.7%.
 
 __5. How many customers have churned straight after their initial free trial - what percentage is this rounded to the nearest whole number?__
 ```
@@ -64,6 +66,8 @@ WHERE c.plan_id=4
 AND rank_number=2
 ```
 ![image](https://user-images.githubusercontent.com/89729029/135281540-106a672c-f5f5-4e7a-860e-228790f6b0c4.png)
+
+- The percentage of customers who have churned straight after their initial free trial was 9%.
 
 __6. What is the number and percentage of customer plans after their initial free trial?__
 ```
