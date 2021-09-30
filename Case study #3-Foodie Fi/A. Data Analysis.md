@@ -19,6 +19,8 @@ GROUP BY DATE_TRUNC('month',start_date), TO_CHAR(start_date,'Mon')
 ORDER BY DATE_TRUNC('month',start_date)
 ```
 ![image](https://user-images.githubusercontent.com/89729029/135274163-01637fda-f17c-4553-bde9-c97407464255.png)
+- The number of customers signed up to an initial 7 day free trial is highest on March, whereas the least number of customers first signed up the Foodie-Fi on February. 
+- After declining rapidly on February, the number of customers first signing up the Foodie-Fi increased remarkably on March.
 
 __3. What plan start_date values occur after the year 2020 for our dataset? Show the breakdown by count of events for each plan_name?__
 ```
@@ -141,3 +143,63 @@ ON t.customer_id=a.customer_id
 ![image](https://user-images.githubusercontent.com/89729029/135372960-434ab62f-c153-4fac-bf8c-5853b1774a87.png)
 
 __10. Can you further breakdown this average value into 30 day periods (i.e. 0-30 days, 31-60 days etc)__
+```
+WITH trial AS
+(
+SELECT customer_id, 
+       plan_id, 
+       start_date
+FROM foodie_fi.subscriptions
+WHERE plan_id=0
+),
+annual AS
+(
+SELECT customer_id, 
+       plan_id, 
+       start_date AS annual_date
+FROM foodie_fi.subscriptions
+WHERE plan_id=3
+),
+bin AS
+(
+SELECT WIDTH_BUCKET(annual_date - start_date, 0, 360, 12) AS period
+FROM trial AS t
+JOIN annual AS a
+ON t.customer_id = a.customer_id
+)
+
+SELECT ((period-1)*30 || '-' || period*30 ||' '||'days') AS period_day, 
+       COUNT(period)
+FROM bin
+GROUP BY period
+```
+![image](https://user-images.githubusercontent.com/89729029/135377413-231ab88c-5181-4014-a6d5-b7e2e4321402.png)
+
+__10. How many customers downgraded from a pro monthly to a basic monthly plan in 2020?__
+```
+WITH basic_monthly AS
+(
+SELECT customer_id, 
+       plan_id, 
+       start_date
+FROM foodie_fi.subscriptions
+WHERE plan_id=1
+),
+pro_monthly AS
+(
+SELECT customer_id, 
+       plan_id, 
+       start_date AS pro_date
+FROM foodie_fi.subscriptions
+WHERE plan_id=2
+)
+
+SELECT COUNT(b.customer_id)
+FROM basic_monthly AS b
+JOIN pro_monthly AS p
+ON b.customer_id=p.customer_id
+WHERE start_date>pro_date
+AND DATE_PART('year', start_date)=2020
+```
+![image](https://user-images.githubusercontent.com/89729029/135378341-6286d21a-a49f-4f8f-823b-603171affc62.png)
+- There are not any customers downgraded from a pro monthly to a basic monthly plan in 2020.
