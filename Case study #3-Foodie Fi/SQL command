@@ -96,3 +96,82 @@ SELECT COUNT(DISTINCT customer_id)
 FROM foodie_fi.subscriptions
 WHERE DATE_PART('year',start_date)=2020
 AND plan_id=3
+
+9. How many days on average does it take for a customer to an annual plan from the day they join Foodie-Fi?
+
+WITH trial AS
+(
+SELECT customer_id, 
+       plan_id, 
+       start_date
+FROM foodie_fi.subscriptions
+WHERE plan_id=0),
+annual AS
+(
+SELECT customer_id, 
+       plan_id, 
+       start_date AS annual_date
+FROM foodie_fi.subscriptions
+WHERE plan_id=3)
+
+SELECT ROUND(AVG(annual_date-start_date),2) AS average_day
+FROM trial AS t
+JOIN annual AS a
+ON t.customer_id=a.customer_id
+
+10. Can you further breakdown this average value into 30 day periods (i.e. 0-30 days, 31-60 days etc)
+
+WITH trial AS
+(
+SELECT customer_id, 
+       plan_id, 
+       start_date
+FROM foodie_fi.subscriptions
+WHERE plan_id=0
+),
+annual AS
+(
+SELECT customer_id, 
+       plan_id, 
+       start_date AS annual_date
+FROM foodie_fi.subscriptions
+WHERE plan_id=3
+),
+bin AS
+(
+SELECT WIDTH_BUCKET(annual_date - start_date, 0, 360, 12) AS period
+FROM trial AS t
+JOIN annual AS a
+ON t.customer_id = a.customer_id
+)
+
+SELECT ((period-1)*30 || '-' || period*30 ||' '||'days') AS period_day, 
+       COUNT(period)
+FROM bin
+GROUP BY period
+
+10. How many customers downgraded from a pro monthly to a basic monthly plan in 2020?
+
+WITH basic_monthly AS
+(
+SELECT customer_id, 
+       plan_id, 
+       start_date
+FROM foodie_fi.subscriptions
+WHERE plan_id=1
+),
+pro_monthly AS
+(
+SELECT customer_id, 
+       plan_id, 
+       start_date AS pro_date
+FROM foodie_fi.subscriptions
+WHERE plan_id=2
+)
+
+SELECT COUNT(b.customer_id)
+FROM basic_monthly AS b
+JOIN pro_monthly AS p
+ON b.customer_id=p.customer_id
+WHERE start_date>pro_date
+AND DATE_PART('year', start_date)=2020
