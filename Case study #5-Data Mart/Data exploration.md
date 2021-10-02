@@ -52,6 +52,31 @@ GROUP BY platform
 
 __6. What is the percentage of sales for Retail vs Shopify for each month?__
 ```
+WITH sales_platform AS 
+(
+SELECT platform, 
+       month_number, 
+       calendar_year, 
+       SUM(sales) AS monthly_sales
+FROM clean_weekly_sales
+GROUP BY platform, 
+         month_number, 
+         calendar_year
+)
+
+SELECT calendar_year, 
+       month_number, 
+       ROUND(((MAX(CASE WHEN platform='Retail' THEN monthly_sales ELSE null END))/SUM(monthly_sales)),3) AS retail, 
+       ROUND(((MAX(CASE WHEN platform='Shopify' THEN monthly_sales ELSE NULL END))/SUM(monthly_sales)),3) AS shopify
+FROM sales_platform
+GROUP BY calendar_year, 
+         month_number
+ORDER BY calendar_year, 
+         month_number
+```
+![image](https://user-images.githubusercontent.com/89729029/135712809-7fa5e834-5dcd-4e8a-bb4b-59305653cb4e.png)
+
+__7. What is the percentage of sales by demographic for each year in the dataset?__
 
 
                 
