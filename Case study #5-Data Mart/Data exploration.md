@@ -105,10 +105,20 @@ SELECT age_band,
        ROUND(100*(sum(sales)::NUMERIC/(SELECT SUM(sales) FROM clean_weekly_sales)),2) AS percentage
 FROM clean_weekly_sales
 WHERE platform='Retail'                 
-GROUP BY age_band, demographic 
+GROUP BY age_band, 
+         demographic 
 ORDER BY ROUND(100*(sum(sales)::numeric/(SELECT SUM(sales) FROM clean_weekly_sales)),2) DESC   
 ```                 
 ![image](https://user-images.githubusercontent.com/89729029/135739910-ed624b23-15f4-4757-a5c4-c74abedef05e.png)
 
 __9. Can we use the avg_transaction column to find the average transaction size for each year for Retail vs Shopify? If not - how would you calculate it instead?__
-
+```
+SELECT calendar_year, 
+       platform, 
+       AVG(avg_transaction)
+FROM clean_weekly_sales                
+GROUP BY calendar_year, 
+         platform                 
+ORDER BY calendar_year
+```
+![image](https://user-images.githubusercontent.com/89729029/135740024-3bffc1f3-befc-45a4-af47-0f5c5de74a89.png)
