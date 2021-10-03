@@ -77,6 +77,26 @@ ORDER BY calendar_year,
 ![image](https://user-images.githubusercontent.com/89729029/135712809-7fa5e834-5dcd-4e8a-bb4b-59305653cb4e.png)
 
 __7. What is the percentage of sales by demographic for each year in the dataset?__
+```
+WITH sales_demo AS 
+(
+SELECT calendar_year, 
+       demographic, 
+       SUM(sales) AS yearly_sales
+FROM clean_weekly_sales                 
+GROUP BY calendar_year, 
+         demographic
+)
+                 
+SELECT calendar_year, 
+       ROUND(((MAX(CASE WHEN demographic='Couples' THEN yearly_sales ELSE NULL END))/SUM(yearly_sales)),3) AS Couples, 
+       ROUND(((MAX(CASE WHEN demographic='Families' THEN yearly_sales ELSE NULL END))/SUM(yearly_sales)),3) AS Families, 
+       ROUND(((MAX(CASE WHEN demographic='Unknown' THEN yearly_sales ELSE NULL END))/SUM(yearly_sales)),3) AS Unknown_type 
+FROM sales_demo
+GROUP BY calendar_year
+```
+![image](https://user-images.githubusercontent.com/89729029/135738854-b2d64e1d-e1b7-404d-ad63-6d94bdbbebce.png)
 
+__8. Which age_band and demographic values contribute the most to Retail sales?__
 
                 
