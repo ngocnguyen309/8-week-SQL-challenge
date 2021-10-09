@@ -90,3 +90,30 @@ GROUP BY calendar_year,
          four_weeks_after
 ```
 ![image](https://user-images.githubusercontent.com/89729029/136660620-126e3cc2-56e8-4cb6-93b3-5bdf0f639dc7.png)
+
+```
+WITH week_sales AS 
+(
+SELECT calendar_year,
+  	   week_number, 
+       SUM(sales) AS weekly_sales
+FROM clean_weekly_sales                                    
+WHERE (week_number between 13 and 36)
+GROUP BY calendar_year, week_number                                   
+),                                  
+change AS
+(                                  
+SELECT calendar_year,
+  	   SUM(CASE WHEN (week_number BETWEEN 13 AND 24) THEN weekly_sales END) AS twelve_weeks_before, 
+       SUM(CASE WHEN (week_number BETWEEN 25 AND 36) THEN weekly_sales END) AS twelve_weeks_after 
+FROM week_sales
+GROUP BY calendar_year)                 
+                                  
+SELECT calendar_year,
+       twelve_weeks_before, 
+       twelve_weeks_after, 
+       (twelve_weeks_after-twelve_weeks_before) AS difference,
+       ROUND(100*((twelve_weeks_after-twelve_weeks_before)/twelve_weeks_before),2) AS rate
+FROM change
+```
+![image](https://user-images.githubusercontent.com/89729029/136660956-bf9aa188-ffe0-476b-8277-a80930a02984.png)
