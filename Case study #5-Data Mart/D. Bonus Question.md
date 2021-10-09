@@ -107,3 +107,38 @@ GROUP BY age_band,
 ORDER BY ROUND(100*((twelve_weeks_after-twelve_weeks_before)/twelve_weeks_before),2) DESC
 ```
 ![image](https://user-images.githubusercontent.com/89729029/136661430-f0699974-e03f-49d5-a6c8-85505867dbe8.png)
+
+__4. demoraphic
+```
+WITH week_sales AS 
+(
+SELECT demographic,
+  	   week_number, 
+       SUM(sales) AS weekly_sales
+FROM clean_weekly_sales                                    
+WHERE (week_number between 13 and 36)
+AND calendar_year=2020
+GROUP BY demographic, 
+         week_number                                   
+),                                  
+change AS
+(                                  
+SELECT demographic,
+  	   SUM(CASE WHEN (week_number BETWEEN 13 AND 24) THEN weekly_sales END) AS twelve_weeks_before, 
+       SUM(CASE WHEN (week_number BETWEEN 25 AND 36) THEN weekly_sales END) AS twelve_weeks_after 
+FROM week_sales
+GROUP BY demographic)                 
+                                  
+SELECT demographic,
+       twelve_weeks_before, 
+       twelve_weeks_after, 
+       (twelve_weeks_after-twelve_weeks_before) AS difference,
+       ROUND(100*((twelve_weeks_after-twelve_weeks_before)/twelve_weeks_before),2) AS rate
+FROM change
+GROUP BY demographic, 
+         twelve_weeks_before,
+         twelve_weeks_after
+ORDER BY ROUND(100*((twelve_weeks_after-twelve_weeks_before)/twelve_weeks_before),2) DESC
+```
+![image](https://user-images.githubusercontent.com/89729029/136661657-4c807d56-8ed6-4e9d-a3d3-1cc29ea27cc4.png)
+
