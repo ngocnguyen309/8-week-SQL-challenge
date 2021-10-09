@@ -115,5 +115,8 @@ SELECT calendar_year,
        (twelve_weeks_after-twelve_weeks_before) AS difference,
        ROUND(100*((twelve_weeks_after-twelve_weeks_before)/twelve_weeks_before),2) AS rate
 FROM change
+GROUP BY calendar_year, 
+         four_weeks_before, 
+         four_weeks_after
 ```
 ![image](https://user-images.githubusercontent.com/89729029/136660956-bf9aa188-ffe0-476b-8277-a80930a02984.png)
