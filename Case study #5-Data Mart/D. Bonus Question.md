@@ -72,3 +72,37 @@ GROUP BY platform,
 ORDER BY ROUND(100*((twelve_weeks_after-twelve_weeks_before)/twelve_weeks_before),2) DESC
 ```
 ![image](https://user-images.githubusercontent.com/89729029/136661285-eb0128b5-c2e1-4584-ad59-53c383783868.png)
+
+__3. age_band__
+```
+WITH week_sales AS 
+(
+SELECT age_band,
+  	   week_number, 
+       SUM(sales) AS weekly_sales
+FROM clean_weekly_sales                                    
+WHERE (week_number between 13 and 36)
+AND calendar_year=2020
+GROUP BY age_band, 
+         week_number                                   
+),                                  
+change AS
+(                                  
+SELECT age_band,
+  	   SUM(CASE WHEN (week_number BETWEEN 13 AND 24) THEN weekly_sales END) AS twelve_weeks_before, 
+       SUM(CASE WHEN (week_number BETWEEN 25 AND 36) THEN weekly_sales END) AS twelve_weeks_after 
+FROM week_sales
+GROUP BY age_band)                 
+                                  
+SELECT age_band,
+       twelve_weeks_before, 
+       twelve_weeks_after, 
+       (twelve_weeks_after-twelve_weeks_before) AS difference,
+       ROUND(100*((twelve_weeks_after-twelve_weeks_before)/twelve_weeks_before),2) AS rate
+FROM change
+GROUP BY age_band, 
+         twelve_weeks_before,
+         twelve_weeks_after
+ORDER BY ROUND(100*((twelve_weeks_after-twelve_weeks_before)/twelve_weeks_before),2) DESC
+```
+![image](https://user-images.githubusercontent.com/89729029/136661430-f0699974-e03f-49d5-a6c8-85505867dbe8.png)
