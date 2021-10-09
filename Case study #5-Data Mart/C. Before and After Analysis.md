@@ -57,3 +57,32 @@ FROM change
 ![image](https://user-images.githubusercontent.com/89729029/136660332-df5afd05-caef-4da6-8bda-ba3855bbc1d8.png)
 
 __3. How do the sale metrics for these 2 periods before and after compare with the previous years in 2018 and 2019?__
+```
+WITH week_sales AS 
+(
+SELECT calendar_year,
+  	week_number, 
+       SUM(sales) AS weekly_sales
+FROM clean_weekly_sales                                    
+GROUP BY calendar_year, week_number                                   
+HAVING week_number BETWEEN 21 AND 28
+),                                  
+change AS
+(                                  
+SELECT calendar_year, SUM(CASE WHEN (week_number BETWEEN 21 AND 24) THEN weekly_sales END) AS four_weeks_before, 
+       SUM(CASE WHEN (week_number BETWEEN 25 AND 28) THEN weekly_sales END) AS four_weeks_after 
+FROM week_sales
+GROUP BY calendar_year
+)                 
+                                  
+SELECT calendar_year,
+       four_weeks_before, 
+       four_weeks_after, 
+       (four_weeks_after-four_weeks_before) AS difference,
+       ROUND(100*((four_weeks_after-four_weeks_before)/four_weeks_before),2) AS rate
+FROM change
+GROUP BY calendar_year, 
+         four_weeks_before, 
+         four_weeks_after
+```
+![image](https://user-images.githubusercontent.com/89729029/136660620-126e3cc2-56e8-4cb6-93b3-5bdf0f639dc7.png)
