@@ -54,4 +54,6 @@ SELECT twelve_weeks_before,
        ROUND(100*((twelve_weeks_after-twelve_weeks_before)/twelve_weeks_before),2) AS rate
 FROM change                                    
 ```
+![image](https://user-images.githubusercontent.com/89729029/136660332-df5afd05-caef-4da6-8bda-ba3855bbc1d8.png)
+
 __3. How do the sale metrics for these 2 periods before and after compare with the previous years in 2018 and 2019?__
