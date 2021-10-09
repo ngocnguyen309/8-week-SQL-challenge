@@ -142,3 +142,33 @@ ORDER BY ROUND(100*((twelve_weeks_after-twelve_weeks_before)/twelve_weeks_before
 ```
 ![image](https://user-images.githubusercontent.com/89729029/136661657-4c807d56-8ed6-4e9d-a3d3-1cc29ea27cc4.png)
 
+__5. customer_type__
+```
+WITH week_sales AS 
+(
+SELECT customer_type,
+  	   week_number, 
+       SUM(sales) AS weekly_sales
+FROM clean_weekly_sales                                    
+WHERE (week_number between 13 and 36)
+AND calendar_year=2020
+GROUP BY customer_type, week_number                                   
+),                                  
+change AS
+(                                  
+SELECT customer_type,
+  	   SUM(CASE WHEN (week_number BETWEEN 13 AND 24) THEN weekly_sales END) AS twelve_weeks_before, 
+       SUM(CASE WHEN (week_number BETWEEN 25 AND 36) THEN weekly_sales END) AS twelve_weeks_after 
+FROM week_sales
+GROUP BY customer_type)                 
+                                  
+SELECT customer_type,
+       twelve_weeks_before, 
+       twelve_weeks_after, 
+       (twelve_weeks_after-twelve_weeks_before) AS difference,
+       ROUND(100*((twelve_weeks_after-twelve_weeks_before)/twelve_weeks_before),2) AS rate
+FROM change
+GROUP BY customer_type, twelve_weeks_before,twelve_weeks_after
+ORDER BY ROUND(100*((twelve_weeks_after-twelve_weeks_before)/twelve_weeks_before),2) DESC
+```
+![image](https://user-images.githubusercontent.com/89729029/136661750-37c5d762-a80a-41a9-ab00-5d40802cf046.png) 
