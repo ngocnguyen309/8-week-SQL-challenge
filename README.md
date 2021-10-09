@@ -54,3 +54,14 @@ The management team at Data Bank want to increase their total customer base - bu
 This case study is all about calculating metrics, growth and helping the business analyse their data in a smart way to better forecast and plan for their future developments!
 
 Here is my [answer](https://github.com/ngocnguyen309/8-week-SQL-challenge/tree/main/Case%20study%20%234-Data%20Bank)
+
+> ### CASE STUDY #5 - Data Mart
+![5](https://user-images.githubusercontent.com/89729029/136661822-018e8763-62a0-4f36-abbd-f35bf7faca3e.png)
+
+Data Mart is Danny’s latest venture and after running international operations for his online supermarket that specialises in fresh produce - Danny is asking for your support to analyse his sales performance.
+
+In June 2020 - large scale supply changes were made at Data Mart. All Data Mart products now use sustainable packaging methods in every single step from the farm all the way to the customer.
+
+Danny needs your help to quantify the impact of this change on the sales performance for Data Mart and it’s separate business areas.
+
+Here is my [answer](https://github.com/ngocnguyen309/8-week-SQL-challenge/tree/main/Case%20study%20%235-Data%20Mart)
