@@ -40,8 +40,10 @@ WITH week_sales AS
 SELECT week_number, 
        SUM(sales) AS weekly_sales
 FROM clean_weekly_sales                                    
-GROUP BY week_number                                   
-HAVING week_number BETWEEN 13 AND 36
+WHERE (week_number BETWEEN 21 AND 28)
+AND calendar_year=2020
+GROUP BY calendar_year,
+         week_number 
 ),                                  
 change AS
 (                                  
@@ -56,7 +58,7 @@ SELECT twelve_weeks_before,
        ROUND(100*((twelve_weeks_after-twelve_weeks_before)/twelve_weeks_before),2) AS rate
 FROM change                                    
 ```
-![image](https://user-images.githubusercontent.com/89729029/136660332-df5afd05-caef-4da6-8bda-ba3855bbc1d8.png)
+![image](https://user-images.githubusercontent.com/89729029/136660823-84012ea8-9f33-4b5e-bb3b-8b1bed4b61a0.png)
 
 __3. How do the sale metrics for these 2 periods before and after compare with the previous years in 2018 and 2019?__
 ```
