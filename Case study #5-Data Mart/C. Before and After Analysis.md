@@ -6,14 +6,52 @@ SELECT distinct week_number
 FROM clean_weekly_sales                 
 WHERE week_day='2020-06-15'    
 
-WITH week_sales AS (SELECT week_number, sum(sales) as weekly_sales
+WITH week_sales AS 
+(
+SELECT week_number, 
+       SUM(sales) AS weekly_sales
 FROM clean_weekly_sales                                    
 GROUP BY week_number                                   
-HAVING week_number between 21 and 28),                                  
-change AS(                                  
-SELECT SUM(CASE WHEN (week_number between 21 and 24) then weekly_sales end) AS four_weeks_before, SUM(CASE WHEN (week_number between 25 and 28) then weekly_sales end) AS four_weeks_after 
-FROM week_sales)                 
+HAVING week_number BETWEEN 21 AND 28
+),                                  
+change AS
+(                                  
+SELECT SUM(CASE WHEN (week_number BETWEEN 21 AND 24) THEN weekly_sales END) AS four_weeks_before, 
+       SUM(CASE WHEN (week_number BETWEEN 25 AND 28) THEN weekly_sales END) AS four_weeks_after 
+FROM week_sales
+)                 
                                   
-SELECT four_weeks_before, four_weeks_after, (four_weeks_after-four_weeks_before)/four_weeks_before as rate
-FROM change   
+SELECT four_weeks_before, 
+       four_weeks_after, 
+       (four_weeks_after-four_weeks_before) AS difference,
+       ROUND(100*((four_weeks_after-four_weeks_before)/four_weeks_before),2) AS rate
+FROM change     
 ```
+![image](https://user-images.githubusercontent.com/89729029/136659616-352dd4a4-f3b0-47c0-a6ca-0f76d39fbef2.png)
+
+- After lauching the program, there was an slight decreasing in sales compared to 4 weeks before.
+
+__2. What about the entire 12 weeks before and after?__
+```
+WITH week_sales AS 
+(
+SELECT week_number, 
+       SUM(sales) AS weekly_sales
+FROM clean_weekly_sales                                    
+GROUP BY week_number                                   
+HAVING week_number BETWEEN 13 AND 36
+),                                  
+change AS
+(                                  
+SELECT SUM(CASE WHEN (week_number BETWEEN 13 AND 24) THEN weekly_sales END) AS twelve_weeks_before, 
+       SUM(CASE WHEN (week_number BETWEEN 25 AND 36) THEN weekly_sales END) AS twelve_weeks_after 
+FROM week_sales
+)                 
+                                  
+SELECT twelve_weeks_before, 
+       twelve_weeks_after, 
+       (twelve_weeks_after-twelve_weeks_before) AS difference,
+       ROUND(100*((twelve_weeks_after-twelve_weeks_before)/twelve_weeks_before),2) AS rate
+FROM change                                    
+```
+__3. How do the sale metrics for these 2 periods before and after compare with the previous years in 2018 and 2019?__
