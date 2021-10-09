@@ -5,6 +5,7 @@ __Which areas of the business have the highest negative impact in sales metrics 
 - age_band
 - demographic
 - customer_type
+
 __1. region__
 ```
 WITH week_sales AS 
