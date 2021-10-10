@@ -45,3 +45,19 @@ GROUP BY event_name
 ![image](https://user-images.githubusercontent.com/89729029/136699156-d3fec074-bc02-40a8-abdc-da0b0f37c583.png)
 
 __5. What is the percentage of visits which have a purchase event?__
+```
+WITH events AS
+(
+SELECT event_name, 
+       COUNT(e.event_type) AS number_events
+FROM clique_bait.events AS e
+JOIN clique_bait.event_identifier AS ei
+ON e.event_type = ei.event_type
+GROUP BY event_name
+)
+
+SELECT number_events::FLOAT/ (SELECT COUNT(event_type) FROM clique_bait.events) AS percentage
+FROM events
+WHERE event_name='Purchase'
+```
+![image](https://user-images.githubusercontent.com/89729029/136700084-c0f6ab9a-a9af-4b41-aa36-2a42485e4a27.png)
