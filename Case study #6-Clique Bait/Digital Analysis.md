@@ -61,3 +61,6 @@ FROM events
 WHERE event_name='Purchase'
 ```
 ![image](https://user-images.githubusercontent.com/89729029/136700084-c0f6ab9a-a9af-4b41-aa36-2a42485e4a27.png)
+
+__6. What is the percentage of visits which view the checkout page but do not have a purchase event?__
+
