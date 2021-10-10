@@ -25,3 +25,23 @@ FROM cookie
 - On average, each user has 3.564 cookies.
 
 __3. What is the unique number of visits by all users per month?__
+```
+SELECT  DATE_PART('month', event_time) AS month_visit,
+        COUNT(DISTINCT visit_id) AS number_visit
+FROM clique_bait.events
+GROUP BY DATE_PART('month', event_time)
+```
+![image](https://user-images.githubusercontent.com/89729029/136698969-948b853f-b2d2-416c-99e4-6576cb6db2ed.png)
+
+__4. What is the number of events for each event type?__
+```
+SELECT event_name, 
+       COUNT(e.event_type) AS number_events
+FROM clique_bait.events AS e
+JOIN clique_bait.event_identifier AS ei
+ON e.event_type = ei.event_type
+GROUP BY event_name
+```
+![image](https://user-images.githubusercontent.com/89729029/136699156-d3fec074-bc02-40a8-abdc-da0b0f37c583.png)
+
+__5. What is the percentage of visits which have a purchase event?__
