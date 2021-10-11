@@ -67,4 +67,14 @@ __2. Which product was most likely to be abandoned?__
 - On the other hand, customer usually stop checking out with Russian Caviar of Luxury category.
 
 __3. Which product had the highest view to purchase percentage?__
+```
+SELECT page_name, 
+       product_category, 
+       ROUND((purchased::NUMERIC/page_viewed),2) AS conversion_rate
+FROM percentage
+ORDER BY purchased/page_viewed DESC 
+```
+![image](https://user-images.githubusercontent.com/89729029/136775015-02ec1855-adc6-40ef-94c4-52ea75af8613.png)
+
+- Lobster had the highest view to purchase percentage
 
