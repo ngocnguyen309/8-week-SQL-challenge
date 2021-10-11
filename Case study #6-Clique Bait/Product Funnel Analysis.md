@@ -79,3 +79,9 @@ ORDER BY purchased/page_viewed DESC
 - Lobster had the highest view to purchase percentage at 49%.
 
 __4. What is the average conversion rate from view to cart add?__
+```
+SELECT ROUND(AVG(added_to_cart::NUMERIC/page_viewed),2) AS add_to_cart_percentage, 
+       ROUND(AVG(purchased::NUMERIC/added_to_cart),2) AS purchase_percentage
+FROM percentage
+```
+![image](https://user-images.githubusercontent.com/89729029/136775925-8b4530cc-4711-4a25-9c35-9924d3262dfd.png)
