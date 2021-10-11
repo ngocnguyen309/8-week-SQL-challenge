@@ -7,7 +7,8 @@ Using a single SQL query - create a new output table which has the following det
 
 __Create table to calculate the number of page view and add to cart by visit_id__
 ```
-SELECT ph.page_id, 
+SELECT visit_id,
+       ph.page_id, 
        page_name, 
        product_category, 
        SUM(CASE WHEN event_type=1 THEN 1 ELSE 0 END) AS page_view, 
