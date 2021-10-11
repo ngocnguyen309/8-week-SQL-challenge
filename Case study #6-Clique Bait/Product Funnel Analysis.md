@@ -76,5 +76,6 @@ ORDER BY purchased/page_viewed DESC
 ```
 ![image](https://user-images.githubusercontent.com/89729029/136775015-02ec1855-adc6-40ef-94c4-52ea75af8613.png)
 
-- Lobster had the highest view to purchase percentage
+- Lobster had the highest view to purchase percentage at 49%.
 
+__4. What is the average conversion rate from view to cart add?__
