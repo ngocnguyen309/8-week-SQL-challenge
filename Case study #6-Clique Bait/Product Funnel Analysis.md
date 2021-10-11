@@ -61,4 +61,7 @@ GROUP BY page_id,
 ![image](https://user-images.githubusercontent.com/89729029/136770283-938ce962-132a-4188-937f-6ec4d1271079.png)
 
 __1. Which product had the most views, cart adds and purchases?__
-- The most views and cart adds is Shellfish. It is clear that vistors usually view Oyster product on our website. However, Lobster is the most popular product which people visited our website add to cart. 
+- The most views and cart adds is Shellfish. It is clear that vistors has the most view with Oyster product on our website. However, Lobster is the most popular product which customers add to cart. Lobster is also the most purchased product, followed by Oyster. 
+
+__2. Which product was most likely to be abandoned?__
+
