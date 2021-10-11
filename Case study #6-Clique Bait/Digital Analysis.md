@@ -99,5 +99,32 @@ GROUP BY product_category
 
 __9. What are the top 3 products by purchases?__
 ```
-updating
+WITH purchase AS 
+(
+SELECT *
+FROM clique_bait.events
+WHERE event_type=3
+),
+cart AS 
+(
+SELECT * 
+FROM clique_bait.events 
+WHERE event_type=2
+)
+
+SELECT c.page_id, 
+       ph.page_name, 
+       COUNT(c.page_id) AS amount
+FROM purchase AS p
+JOIN cart AS c
+ON p.visit_id=c.visit_id
+JOIN clique_bait.page_hierarchy AS ph
+ON c.page_id=ph.page_id
+WHERE p.sequence_number>c.sequence_number
+GROUP BY c.page_id, 
+         ph.page_name
+ORDER BY COUNT(c.page_id) DESC
+LIMIT 3
 ```
+![image](https://user-images.githubusercontent.com/89729029/136729046-69f9e68a-89a0-434a-86a9-f851ae282ee0.png)
+
