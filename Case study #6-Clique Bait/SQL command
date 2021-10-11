@@ -1,1 +1,41 @@
+WITH view_and_add AS
+(SELECT visit_id,
+       ph.page_id, 
+       page_name, 
+       product_category, 
+       SUM(CASE WHEN event_type=1 THEN 1 ELSE 0 END) AS page_view, 
+       SUM(CASE WHEN event_type=2 THEN 1 ELSE 0 END) AS add_to_cart
+FROM clique_bait.events AS e
+JOIN clique_bait.page_hierarchy AS ph
+ON e.page_id=ph.page_id
+WHERE product_category IS NOT NULL
+GROUP BY visit_id, 
+         ph.page_id, 
+         page_name, 
+         product_category),
+purchase_type AS 
+(SELECT DISTINCT visit_id 
+FROM clique_bait.events 
+WHERE event_type=3),
+combine AS 
+(SELECT v.visit_id, 
+       page_id, 
+       page_name, 
+       product_category, 
+       page_view, 
+       add_to_cart, 
+       (CASE WHEN p.visit_id IS NOT NULL THEN 1 ELSE 0 END) AS purchase
+FROM view_and_add AS v
+LEFT JOIN purchase_type AS p
+ON v.visit_id=p.visit_id)
+
+SELECT page_id, 
+       page_name,  
+       SUM(page_view) AS page_viewed, 
+       SUM(add_to_cart) AS added_to_cart, 
+       SUM(CASE WHEN add_to_cart=1 and purchase=0 THEN 1 ELSE 0 END) AS abandoned, 
+       SUM(CASE WHEN add_to_cart =1 and purchase =1 THEN 1 ELSE 0 END) AS purchased
+FROM combine
+GROUP BY page_id, 
+         page_name
 
