@@ -60,7 +60,7 @@ SELECT 100*(number_events::FLOAT)/ (SELECT COUNT(DISTINCT visit_id) FROM clique_
 FROM events
 WHERE event_name='Purchase'
 ```
-![image](https://user-images.githubusercontent.com/89729029/136723470-85403de8-e0e4-4ae7-adf0-4741e05e5349.png)
+![image](https://user-images.githubusercontent.com/89729029/136723523-accc35a3-1685-4adc-addd-1a36234a71f9.png)
 
 __6. What is the percentage of visits which view the checkout page but do not have a purchase event?__
 ```
@@ -72,3 +72,32 @@ AND event_type=1
 ![image](https://user-images.githubusercontent.com/89729029/136723266-5d139741-4689-43b7-bbd0-81d5dd970b4d.png)
 
 __7. What are the top 3 pages by number of views?__
+```
+SELECT page_name, 
+       COUNT(e.event_type)
+FROM clique_bait.events AS e
+JOIN clique_bait.page_hierarchy AS p
+ON e.page_id=p.page_id
+WHERE event_type=1
+GROUP BY page_name
+ORDER BY COUNT(e.event_type) DESC
+```
+![image](https://user-images.githubusercontent.com/89729029/136723918-aa97a205-f2bd-4048-b010-590aa7965469.png)
+
+__8. What is the number of views and cart adds for each product category?__
+```
+SELECT product_category, 
+       SUM(CASE WHEN e.event_type =1 THEN 1 ELSE 0 END) AS number_view,
+       SUM(CASE WHEN e.event_type=2 THEN 1 ELSE 0 END) AS add_to_cart
+FROM clique_bait.events AS e
+JOIN clique_bait.page_hierarchy AS p
+ON e.page_id=p.page_id
+WHERE product_category IS NOT NULL
+GROUP BY product_category
+```
+![image](https://user-images.githubusercontent.com/89729029/136724275-ab355999-98d0-48e1-8d10-acac67be9071.png)
+
+__9. What are the top 3 products by purchases?__
+```
+
+```
