@@ -49,19 +49,26 @@ __5. What is the percentage of visits which have a purchase event?__
 WITH events AS
 (
 SELECT event_name, 
-       COUNT(e.event_type) AS number_events
+       COUNT(DISTINCT visit_id) AS number_events
 FROM clique_bait.events AS e
 JOIN clique_bait.event_identifier AS ei
 ON e.event_type = ei.event_type
 GROUP BY event_name
 )
 
-SELECT number_events::FLOAT/ (SELECT COUNT(event_type) FROM clique_bait.events) AS percentage
+SELECT 100*(number_events::FLOAT)/ (SELECT COUNT(DISTINCT visit_id) FROM clique_bait.events) AS percentage
 FROM events
 WHERE event_name='Purchase'
 ```
-![image](https://user-images.githubusercontent.com/89729029/136700084-c0f6ab9a-a9af-4b41-aa36-2a42485e4a27.png)
+![image](https://user-images.githubusercontent.com/89729029/136723470-85403de8-e0e4-4ae7-adf0-4741e05e5349.png)
 
 __6. What is the percentage of visits which view the checkout page but do not have a purchase event?__
 ```
+SELECT ROUND(((COUNT(DISTINCT visit_id)::NUMERIC)/(SELECT COUNT(DISTINCT visit_id) FROM clique_bait.events WHERE event_type <> 3)),2) AS checkout_not_purchase
+FROM clique_bait.events 
+WHERE page_id=12
+AND event_type=1
+```
+![image](https://user-images.githubusercontent.com/89729029/136723266-5d139741-4689-43b7-bbd0-81d5dd970b4d.png)
 
+__7. What are the top 3 pages by number of views?__
