@@ -59,6 +59,7 @@ SELECT twelve_weeks_before,
 FROM change                                    
 ```
 ![image](https://user-images.githubusercontent.com/89729029/136660823-84012ea8-9f33-4b5e-bb3b-8b1bed4b61a0.png)
+- After 12 weeks, sales was continually decreased. 
 
 __3. How do the sale metrics for these 2 periods before and after compare with the previous years in 2018 and 2019?__
 ```
