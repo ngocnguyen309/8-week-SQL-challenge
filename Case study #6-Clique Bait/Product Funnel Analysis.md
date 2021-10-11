@@ -42,7 +42,7 @@ __After that, we can define the times that product viewed, added to cart, abando
 SELECT page_id, 
        page_name, 
        product_category, 
-	SUM(page_view) AS page_viewed, 
+       SUM(page_view) AS page_viewed, 
        SUM(add_to_cart) AS added_to_cart, 
        SUM(CASE WHEN add_to_cart=1 and purchase=0 THEN 1 ELSE 0 END) AS abandoned, 
        SUM(CASE WHEN add_to_cart =1 and purchase =1 THEN 1 ELSE 0 END) AS purchased
