@@ -61,5 +61,6 @@ GROUP BY page_id,
 ![image](https://user-images.githubusercontent.com/89729029/136770283-938ce962-132a-4188-937f-6ec4d1271079.png)
 
 __1. Which product had the most views, cart adds and purchases?__
+```
 
 
