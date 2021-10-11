@@ -64,4 +64,7 @@ __1. Which product had the most views, cart adds and purchases?__
 - The most views and cart adds is Shellfish. It is clear that vistors has the most view with Oyster product on our website. However, Lobster is the most popular product which customers add to cart. Lobster is also the most purchased product, followed by Oyster. 
 
 __2. Which product was most likely to be abandoned?__
+- Russian Caviar of Luxury category was most likely to be abandoned
+
+__3. Which product had the highest view to purchase percentage?__
 
