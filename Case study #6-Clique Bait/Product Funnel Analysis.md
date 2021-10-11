@@ -61,6 +61,5 @@ GROUP BY page_id,
 ![image](https://user-images.githubusercontent.com/89729029/136770283-938ce962-132a-4188-937f-6ec4d1271079.png)
 
 __1. Which product had the most views, cart adds and purchases?__
-```
-
-
+- Shellfish has the most views. Oyster is the most viewed product by visitors, followed by Crab. 
+- Shellfish also has the most cart adds. However, Lobster is the most added product, followed by Crab. 
