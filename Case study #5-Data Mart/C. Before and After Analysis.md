@@ -59,7 +59,7 @@ SELECT twelve_weeks_before,
 FROM change                                    
 ```
 ![image](https://user-images.githubusercontent.com/89729029/136660823-84012ea8-9f33-4b5e-bb3b-8b1bed4b61a0.png)
-- After 12 weeks, sales was continually decreased. 
+- After 12 weeks, sales was continually decreased. Maybe the Data Mart's sustainable packaging campaign has some problems, so their sale is not change as much as they want.
 
 __3. How do the sale metrics for these 2 periods before and after compare with the previous years in 2018 and 2019?__
 ```
@@ -121,3 +121,6 @@ GROUP BY calendar_year,
          four_weeks_after
 ```
 ![image](https://user-images.githubusercontent.com/89729029/136660956-bf9aa188-ffe0-476b-8277-a80930a02984.png)
+
+- The sales increased steadily from 2018 to 2020. 
+- However, there was a quick drop in sales for 4 weeks and 12 weeks after lauching the program in 2020.
