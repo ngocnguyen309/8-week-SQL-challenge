@@ -123,4 +123,4 @@ GROUP BY calendar_year,
 ![image](https://user-images.githubusercontent.com/89729029/136660956-bf9aa188-ffe0-476b-8277-a80930a02984.png)
 
 - The sales increased steadily from 2018 to 2020. 
-- However, there was a quick drop in sales for 4 weeks and 12 weeks after lauching the program in 2020.
+- However, there was a quick drop in sales for 4 weeks and 12 weeks after lauching the program in 2020. => Maybe this campagin is not effective.
