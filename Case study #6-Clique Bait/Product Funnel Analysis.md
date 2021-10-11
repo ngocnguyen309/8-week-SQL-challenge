@@ -16,7 +16,9 @@ FROM clique_bait.events AS e
 JOIN clique_bait.page_hierarchy AS ph
 ON e.page_id=ph.page_id
 WHERE product_category IS NOT NULL
-GROUP BY ph.page_id, page_name, product_category
+GROUP BY ph.page_id, 
+         page_name, 
+         product_category
 ```
 __Next, another table to calculate the number of unique visit_id who purchased the product__
 ```
@@ -52,4 +54,6 @@ GROUP BY page_id,
          product_category
 
 ```
-![image](https://user-images.githubusercontent.com/89729029/136734923-7ad0a34b-1130-4b73-803f-957b1d95a17b.png)
+![image](https://user-images.githubusercontent.com/89729029/136769226-1b530a98-3434-475f-bdf6-b54991043c41.png)
+
+
