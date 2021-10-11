@@ -17,7 +17,8 @@ FROM clique_bait.events AS e
 JOIN clique_bait.page_hierarchy AS ph
 ON e.page_id=ph.page_id
 WHERE product_category IS NOT NULL
-GROUP BY ph.page_id, 
+GROUP BY visit_id,
+         ph.page_id, 
          page_name, 
          product_category
 ```
