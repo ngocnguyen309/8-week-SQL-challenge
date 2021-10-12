@@ -56,6 +56,18 @@ FROM discount_by_transaction
 
 __5. What is the percentage split of all transactions for members vs non-members?__
 ```
+WITH percentage_by_member AS
+(
+SELECT SUM(CASE WHEN member='t' THEN 1 ELSE 0 END) AS be_member, 
+       SUM(CASE WHEN member='f' THEN 1 ELSE 0 END) AS non_member
+FROM balanced_tree.sales
+)
 
+SELECT be_member::NUMERIC/(be_member+non_member) AS percent_member, 
+       non_member::NUMERIC/(be_member+non_member) AS percent_non_member
+FROM percentage_by_member
 ```
-What is the average revenue for member transactions and non-member transactions?
+![image](https://user-images.githubusercontent.com/89729029/136976535-a2632597-6c30-4fea-bf07-c0203b3a8990.png)
+
+__6. What is the average revenue for member transactions and non-member transactions?__
+
