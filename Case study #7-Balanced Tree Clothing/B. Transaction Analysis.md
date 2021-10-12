@@ -71,10 +71,10 @@ FROM percentage_by_member
 
 __6. What is the average revenue for member transactions and non-member transactions?__
 ```
-SELECT ROUND(AVG(CASE WHEN member='t' THEN qty*(price-price*discount/100) END)::NUMERIC,2) AS be_member, 
-       ROUND(AVG(CASE WHEN member='f' THEN qty*(price-price*discount/100) END)::NUMERIC,2) AS non_member
+SELECT ROUND(AVG(CASE WHEN member='t' THEN qty*price*(1-discount/100) END)::NUMERIC,2) AS be_member, 
+       ROUND(AVG(CASE WHEN member='f' THEN qty*price*(1-discount/100) END)::NUMERIC,2) AS non_member
 FROM balanced_tree.sales
 ```
-![image](https://user-images.githubusercontent.com/89729029/136977879-72067823-be5e-46b8-89ac-565510b0f9c1.png)
+![image](https://user-images.githubusercontent.com/89729029/136978509-8a631dfd-0009-4ae6-b3d1-52574386f4e4.png)
 
 
