@@ -12,24 +12,3 @@ Generate a table that has 1 single row for every unique visit_id record and has 
 - (Optional column) cart_products: a comma separated text value with products added to the cart sorted by the order they were added to the cart (hint: use the sequence_number)
 
 ```
-WITH visit AS 
-(
-SELECT visit_id, 
-       MIN(event_time) AS visit_start_time, 
-       SUM(CASE WHEN event_type=1 THEN 1 ELSE 0 END) AS page_views, 
-       SUM(CASE WHEN event_type=2 THEN 1 ELSE 0 END) AS cart_add, 
-       (CASE WHEN event_type=3 THEN 1 ELSE 0 END) AS purchase, event_type
-FROM clique_bait.events
-GROUP BY visit_id, event_type)
-
-SELECT visit_id, 
-       visit_start_time, 
-       page_views, 
-       cart_add, 
-       purchase, 
-       campaign_name
-FROM visit AS v
-JOIN clique_bait.campaign_identifier AS c
-ON visit_start_time >= start_date
-AND visit_start_time<=end_date
-```
