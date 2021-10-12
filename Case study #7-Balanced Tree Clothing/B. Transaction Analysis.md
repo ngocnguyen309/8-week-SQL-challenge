@@ -54,5 +54,8 @@ FROM discount_by_transaction
 ```
 ![image](https://user-images.githubusercontent.com/89729029/136974507-3ded6feb-5043-477d-9586-68092f2aada7.png)
 
-What is the percentage split of all transactions for members vs non-members?
+__5. What is the percentage split of all transactions for members vs non-members?__
+```
+
+```
 What is the average revenue for member transactions and non-member transactions?
