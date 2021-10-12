@@ -63,11 +63,11 @@ SELECT SUM(CASE WHEN member='t' THEN 1 ELSE 0 END) AS be_member,
 FROM balanced_tree.sales
 )
 
-SELECT be_member::NUMERIC/(be_member+non_member) AS percent_member, 
-       non_member::NUMERIC/(be_member+non_member) AS percent_non_member
+SELECT ROUND((be_member::NUMERIC/(be_member+non_member)),2) AS percent_member, 
+       ROUND((non_member::NUMERIC/(be_member+non_member)),2) AS percent_non_member
 FROM percentage_by_member
 ```
-![image](https://user-images.githubusercontent.com/89729029/136976535-a2632597-6c30-4fea-bf07-c0203b3a8990.png)
+![image](https://user-images.githubusercontent.com/89729029/136976902-01a45903-ceaf-4fd7-b937-1d7d0dd041d7.png)
 
 __6. What is the average revenue for member transactions and non-member transactions?__
 
