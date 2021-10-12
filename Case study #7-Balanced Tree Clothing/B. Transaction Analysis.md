@@ -27,7 +27,7 @@ __3. What are the 25th, 50th and 75th percentile values for the revenue per tran
 WITH revenue_by_transaction AS
 (
 SELECT txn_id, 
-       SUM(qty*price) AS revenue
+       SUM(qty*price*(1-discount/100)) AS revenue
 FROM balanced_tree.sales
 GROUP BY txn_id
 )
@@ -37,7 +37,7 @@ SELECT PERCENTILE_DISC(0.25) WITHIN GROUP (ORDER BY revenue) AS percentile25,
        PERCENTILE_DISC(0.75) WITHIN GROUP (ORDER BY revenue) AS percentile75
 FROM revenue_by_transaction
 ```
-![image](https://user-images.githubusercontent.com/89729029/136973899-e3e31234-314a-43e6-87d6-96577cb98366.png)
+![image](https://user-images.githubusercontent.com/89729029/136978210-ac32e331-3097-4e48-9c03-7c07b9795009.png)
 
 __4. What is the average discount value per transaction?__
 ```
@@ -70,4 +70,11 @@ FROM percentage_by_member
 ![image](https://user-images.githubusercontent.com/89729029/136976902-01a45903-ceaf-4fd7-b937-1d7d0dd041d7.png)
 
 __6. What is the average revenue for member transactions and non-member transactions?__
+```
+SELECT ROUND(AVG(CASE WHEN member='t' THEN qty*(price-price*discount/100) END)::NUMERIC,2) AS be_member, 
+       ROUND(AVG(CASE WHEN member='f' THEN qty*(price-price*discount/100) END)::NUMERIC,2) AS non_member
+FROM balanced_tree.sales
+```
+![image](https://user-images.githubusercontent.com/89729029/136977879-72067823-be5e-46b8-89ac-565510b0f9c1.png)
+
 
