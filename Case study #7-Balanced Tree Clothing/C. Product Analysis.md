@@ -137,4 +137,5 @@ SELECT category_name,
        ROUND(((net_revenue::NUMERIC)/SUM(net_revenue) OVER(PARTITION BY category_name)),2) AS percentage
 FROM segment_by_category                   
 ```
+![image](https://user-images.githubusercontent.com/89729029/137055053-54ae5160-66bf-40ce-ae5b-21f591f9ea8f.png)
 
