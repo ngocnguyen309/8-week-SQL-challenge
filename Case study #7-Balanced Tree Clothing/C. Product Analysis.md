@@ -158,4 +158,20 @@ FROM revenue_by_category
 ![image](https://user-images.githubusercontent.com/89729029/137056989-dc0d7819-4fe3-47f0-af08-73f50e3db7de.png)
 
 __9. What is the total transaction “penetration” for each product? (hint: penetration = number of transactions where at least 1 quantity of a product was purchased divided by total number of transactions)__
+```
+SELECT product_name, 
+       COUNT(txn_id) AS amount
+FROM balanced_tree.sales AS s
+JOIN balanced_tree.product_details AS d
+ON s.prod_id=d.product_id
+WHERE qty>=1
+GROUP BY product_name
+ORDER BY COUNT(txn_id) DESC
+```
+![image](https://user-images.githubusercontent.com/89729029/137058586-9227975f-1db6-483d-9392-aa5d9abba7fc.png)
+
+__10. What is the most common combination of at least 1 quantity of any 3 products in a 1 single transaction?__
+```
+updating
+```
 
