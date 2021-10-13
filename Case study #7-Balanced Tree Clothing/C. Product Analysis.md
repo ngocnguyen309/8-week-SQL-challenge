@@ -118,3 +118,23 @@ FROM product_by_segment
 ![image](https://user-images.githubusercontent.com/89729029/137054585-66123285-decb-4dfc-a4b4-abd5aa89821a.png)
 ![image](https://user-images.githubusercontent.com/89729029/137054636-9a498a68-e696-41b9-bb75-8f8a8cc5cef8.png)
 
+__7. What is the percentage split of revenue by segment for each category?__
+```
+WITH segment_by_category AS 
+(
+SELECT category_name, 
+       segment_name,
+       SUM(qty*s.price*(1-discount/100)) AS net_revenue 
+FROM balanced_tree.product_details AS d                                  
+JOIN balanced_tree.sales AS s
+ON s.prod_id=d.product_id
+GROUP BY category_name, 
+         segment_name)
+
+SELECT category_name, 
+       segment_name, 
+       net_revenue, 
+       ROUND(((net_revenue::NUMERIC)/SUM(net_revenue) OVER(PARTITION BY category_name)),2) AS percentage
+FROM segment_by_category                   
+```
+
