@@ -19,3 +19,10 @@ GROUP BY month_transaction
 ```
 ![image](https://user-images.githubusercontent.com/89729029/137060720-047e2c28-9665-4ff2-88ac-387079c03641.png)
 
+```
+SELECT month_number, 
+       COUNT(DISTINCT m.txn_id)
+FROM monthly AS m
+GROUP BY month_number
+```
+![image](https://user-images.githubusercontent.com/89729029/137061246-ce84a953-c0cd-4e0a-8bd6-667fbf365569.png)
