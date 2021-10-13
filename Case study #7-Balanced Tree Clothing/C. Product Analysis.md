@@ -52,3 +52,50 @@ FROM cte2
 WHERE product_rank=1                     
 ```
 ![image](https://user-images.githubusercontent.com/89729029/137053099-0bef0cf7-3fe4-43be-8f36-ba05466184ed.png)
+
+__4. What is the total quantity, revenue and discount for each category?__
+```
+SELECT category_name, 
+       SUM(qty) AS quantity, 
+       SUM(qty*s.price*(1-discount/100)) AS net_revenue, 
+       SUM(discount*s.price*qty) AS dicount_amount 
+FROM balanced_tree.product_details AS d                                  
+JOIN balanced_tree.sales AS s
+ON s.prod_id=d.product_id
+GROUP BY category_name     
+```
+![image](https://user-images.githubusercontent.com/89729029/137053371-8fca56d9-baea-451a-b33e-beea70693db1.png)
+
+__5. What is the top selling product for each category?__
+```
+WITH cte1 AS 
+(
+SELECT category_name, 
+       product_name, 
+       SUM(qty) AS quantity 
+FROM balanced_tree.product_details AS p
+JOIN balanced_tree.sales AS s
+ON p.product_id=s.prod_id
+GROUP BY category_name, 
+         product_name
+),
+cte2 AS 
+(
+SELECT category_name, 
+       product_name, 
+       quantity, 
+       DENSE_RANK() OVER(PARTITION BY category_name ORDER BY quantity DESC) AS product_rank
+FROM cte1)
+
+SELECT category_name, 
+       product_name, 
+       quantity
+FROM cte2
+WHERE product_rank=1  
+```
+![image](https://user-images.githubusercontent.com/89729029/137053645-1bc45a47-c4d4-4f0c-a9d2-ac415188081f.png)
+
+__6. What is the percentage split of revenue by product for each segment?__
+```
+
+```
