@@ -97,5 +97,24 @@ WHERE product_rank=1
 
 __6. What is the percentage split of revenue by product for each segment?__
 ```
+WITH product_by_segment AS 
+(
+SELECT segment_name, 
+       product_name,
+       SUM(qty*s.price*(1-discount/100)) AS net_revenue 
+FROM balanced_tree.product_details AS d                                  
+JOIN balanced_tree.sales AS s
+ON s.prod_id=d.product_id
+GROUP BY segment_name, 
+         product_name)
 
+SELECT segment_name, 
+       product_name, 
+       net_revenue, 
+       ROUND(((net_revenue::NUMERIC)/SUM(net_revenue) OVER(PARTITION BY segment_name)),2) AS percentage
+FROM product_by_segment                  
 ```
+![image](https://user-images.githubusercontent.com/89729029/137054466-c2314a00-a2ed-4cfe-b783-dc637366dbe3.png)
+![image](https://user-images.githubusercontent.com/89729029/137054585-66123285-decb-4dfc-a4b4-abd5aa89821a.png)
+![image](https://user-images.githubusercontent.com/89729029/137054636-9a498a68-e696-41b9-bb75-8f8a8cc5cef8.png)
+
