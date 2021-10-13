@@ -22,12 +22,13 @@ ORDER BY month_number
 ```
 SELECT month_number, 
        COUNT(DISTINCT m.txn_id) AS unique_transaction, 
-       ROUND(AVG(price*qty),2) AS average_gross_revenue, 
-       ROUND(AVG(price*qty*discount/100),2) AS average_discount_expense
+       ROUND((SUM(price*qty)/COUNT(DISTINCT m.txn_id)),2) AS revenue_per_trans, 
+       ROUND((SUM(price*qty*discount/100)/COUNT(DISTINCT m.txn_id)),2) AS discount_per_trans
 FROM monthly AS m
 JOIN balanced_tree.sales AS s
 ON m.txn_id=s.txn_id
 GROUP BY month_number
 ORDER BY month_number
 ```
-![image](https://user-images.githubusercontent.com/89729029/137063758-3e091dae-5993-477a-947d-e2e42313b61f.png)
+![image](https://user-images.githubusercontent.com/89729029/137064139-54df8b5e-ed2b-4453-b31f-2b0ff6d99361.png)
+
