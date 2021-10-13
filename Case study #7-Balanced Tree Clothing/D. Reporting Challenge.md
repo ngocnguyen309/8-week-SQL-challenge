@@ -32,3 +32,26 @@ ORDER BY month_number
 ```
 ![image](https://user-images.githubusercontent.com/89729029/137064139-54df8b5e-ed2b-4453-b31f-2b0ff6d99361.png)
 
+```
+WITH member_month AS
+(
+SELECT month_number, 
+       member, 
+       COUNT(DISTINCT m.txn_id) AS trans, 
+       SUM(qty*price*(1-discount/100)) AS net_revenue
+FROM monthly AS m
+JOIN balanced_tree.sales AS s
+ON m.txn_id=s.txn_id
+GROUP BY month_number, member
+)
+
+SELECT month_number, 
+       member, 
+       ROUND((trans/SUM(trans) OVER(PARTITION BY month_number)),2) AS percentage_trans, 
+       ROUND(AVG(net_revenue),2) as net_revenue_by_member
+FROM member_month
+GROUP BY month_number, 
+         member, 
+         trans 
+```
+![image](https://user-images.githubusercontent.com/89729029/137068754-f8ae4ff0-3ca4-434c-b351-aeed4d9e9e93.png)
