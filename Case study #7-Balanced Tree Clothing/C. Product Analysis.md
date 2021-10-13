@@ -26,5 +26,29 @@ GROUP BY segment_name
 
 __3. What is the top selling product for each segment?__
 ```
+WITH cte1 AS 
+(
+SELECT segment_name, 
+       product_name, 
+       SUM(qty) AS quantity 
+FROM balanced_tree.product_details AS p
+JOIN balanced_tree.sales AS s
+ON p.product_id=s.prod_id
+GROUP BY segment_name, 
+         product_name
+),
+cte2 AS 
+(
+SELECT segment_name, 
+       product_name, 
+       quantity, 
+       DENSE_RANK() OVER(PARTITION BY segment_name ORDER BY quantity DESC) AS product_rank
+FROM cte1)
 
+SELECT segment_name, 
+       product_name, 
+       quantity
+FROM cte2
+WHERE product_rank=1                     
 ```
+![image](https://user-images.githubusercontent.com/89729029/137053099-0bef0cf7-3fe4-43be-8f36-ba05466184ed.png)
