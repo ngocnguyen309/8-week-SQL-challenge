@@ -1,3 +1,4 @@
+__CTE1__: Extract __month__ from start_txn_time
 ```
 WITH monthly AS 
 (
@@ -7,6 +8,8 @@ FROM balanced_tree.sales
 GROUP BY DATE_PART('month',start_txn_time), 
          txn_id
 )
+```
+```
 SELECT month_number,
        SUM(qty) AS quantity, 
        SUM(qty*price) AS gross_revenue, 
@@ -18,6 +21,25 @@ GROUP BY month_number
 ORDER BY month_number
 ```
 ![image](https://user-images.githubusercontent.com/89729029/137061714-bf3bc3f4-997b-449c-a3b9-dcb0e9f30f46.png)
+
+CTE2:
+```
+WITH cte2 AS
+(
+SELECT month_number, 
+       member, 
+       COUNT(DISTINCT m.txn_id) AS unique_trans, 
+       SUM(qty* price) AS gross_revenue, SUM(price* qty*(1-discount/100)) AS discount_value
+FROM monthly AS m
+JOIN balanced_tree.sales AS s
+ON m.txn_id=s.txn_id
+GROUP BY month_number, 
+         member)
+```
+![image](https://user-images.githubusercontent.com/89729029/137069562-f7d09d07-3801-4acc-b02d-c256a777c2bf.png)
+
+
+
 
 ```
 SELECT month_number, 
