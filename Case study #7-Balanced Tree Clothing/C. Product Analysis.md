@@ -141,5 +141,21 @@ FROM segment_by_category
 
 __8. What is the percentage split of total revenue by category?__
 ```
-
+WITH revenue_by_category AS 
+(
+SELECT category_name, 
+       SUM(qty*s.price*(1-discount/100)) AS net_revenue
+FROM balanced_tree.product_details AS d                             
+JOIN balanced_tree.sales AS s
+ON s.prod_id=d.product_id
+GROUP BY category_name)
+                         
+SELECT category_name, 
+       net_revenue, 
+       ROUND((net_revenue/SUM(net_revenue) OVER()),2) AS percentage
+FROM revenue_by_category       
 ```
+![image](https://user-images.githubusercontent.com/89729029/137056989-dc0d7819-4fe3-47f0-af08-73f50e3db7de.png)
+
+__9. What is the total transaction “penetration” for each product? (hint: penetration = number of transactions where at least 1 quantity of a product was purchased divided by total number of transactions)__
+
