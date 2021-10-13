@@ -8,7 +8,7 @@ GROUP BY DATE_PART('month',start_txn_time),
          txn_id
 )
 SELECT month_number,
-	COUNT(DISTINCT m.txn_id) AS transactions,
+       COUNT(DISTINCT m.txn_id) AS transactions,
        SUM(qty) AS quantity, 
        SUM(qty*price) AS gross_revenue, 
        SUM(qty*price*discount/100) AS discount_expense
