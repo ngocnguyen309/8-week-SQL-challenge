@@ -119,8 +119,33 @@ ON date_start BETWEEN start_date AND end_date
 
 ![image](https://user-images.githubusercontent.com/89729029/137249734-b6bda5e3-76fd-4739-bb39-9a9b6ac67b1e.png)
 
-__There are 2 group of customers who viewed and didn't view the ad__. I labeled 1 for "viewed user"
+__Reach => Impression__
 ```
+SELECT campaign_name, 
+       COUNT(DISTINCT user_id) AS reach
+FROM cte7
+WHERE impression>0
+GROUP BY campaign_name
+```
+![image](https://user-images.githubusercontent.com/89729029/137332659-99ab7f0d-d8e2-438f-9656-31f3a0931409.png)
+
+__Impression=> Click__
+```
+SELECT campaign_name, 
+       COUNT(DISTINCT user_id) AS click
+FROM cte7
+WHERE click>0
+GROUP BY campaign_name
+```
+```
+SELECT i.campaign_name, 
+       ROUND((click_user::NUMERIC/impression_user),2) AS click_to_rate
+FROM impressions AS i
+JOIN clicks AS c
+ON i.campaign_name=c.campaign_name             
+```
+![image](https://user-images.githubusercontent.com/89729029/137336056-47bb1270-d727-4cdf-84db-87c93b8acc93.png)
+
 cte8 AS(
 SELECT impression, 
        SUM(page_views) AS page_views_by_impression, 
