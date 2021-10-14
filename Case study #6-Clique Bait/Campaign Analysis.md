@@ -52,7 +52,7 @@ FROM clique_bait.events
 WHERE event_type=3
 ),
 ```
-__CTE4__: JOIN CTE2 AND CTE3 to get 
+__CTE4__: JOIN cte2 AND cte3 to see whether the purchase event existed or not for each visit_id. 
 ```
 cte4 AS
 (                                   
