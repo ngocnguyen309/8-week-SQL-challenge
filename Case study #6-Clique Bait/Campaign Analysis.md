@@ -43,7 +43,7 @@ GROUP BY user_id,
          DATE(visit_start_time)
 ),
 ```
-__CTE3__: Create a table to find out the visitors who purchased at least one product by filter the visit_id has event_type=3.
+__CTE3__: Create a table to find out the visitors who purchased at least one product by filter the visit_id has __event_type=3__.
 ```
 cte3 AS 
 (
@@ -52,7 +52,7 @@ FROM clique_bait.events
 WHERE event_type=3
 ),
 ```
-__CTE4__: 
+__CTE4__: JOIN CTE2 AND CTE3 to get 
 ```
 cte4 AS
 (                                   
