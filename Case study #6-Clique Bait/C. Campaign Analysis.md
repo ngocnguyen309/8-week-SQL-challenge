@@ -146,6 +146,8 @@ ON i.campaign_name=c.campaign_name
 ```
 ![image](https://user-images.githubusercontent.com/89729029/137336056-47bb1270-d727-4cdf-84db-87c93b8acc93.png)
 
+__Click=>Purchase__
+```
 cte8 AS(
 SELECT impression, 
        SUM(page_views) AS page_views_by_impression, 
@@ -153,7 +155,8 @@ SELECT impression,
        SUM(purchase) AS purchase_by_impression
 FROM cte7
 GROUP BY impression)
-
+```
+```
 SELECT impression, ROUND((purchase_by_impression/page_views_by_impression),2)*100 AS conversion_rate
 FROM cte8
 ```
