@@ -67,6 +67,7 @@ FROM cte2  AS c2
 LEFT JOIN cte3  AS c3                   
 ON c2.visit_id=c3.visit_id),
 ```
+__CTE5__: Calculate the number of visitors who has event_type=4 or event_type=5
 ```
 cte5 as 
 (        
@@ -77,6 +78,7 @@ WHERE event_type=4
 OR event_type=5
 ),
 ```
+__CT6__: JOIN __cte4__ AND __cte5__ to COUNT of _ad impressions_ and _ad click_ for each visit 
 ```
 cte6 AS (                                   
 SELECT user_id, 
@@ -99,6 +101,7 @@ GROUP BY user_id,
          cart_adds, 
          purchase)
 ```
+Finally, JOIN __cte6__ and __clique_bait.campaign_identifier__ to map the visit to a campagin if the visit_start_time falls between the start_date and end_date
 ```
 SELECT user_id, 
        visit_id, 
