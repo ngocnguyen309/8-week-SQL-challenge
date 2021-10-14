@@ -119,5 +119,37 @@ ON date_start BETWEEN start_date AND end_date
 
 ![image](https://user-images.githubusercontent.com/89729029/137249734-b6bda5e3-76fd-4739-bb39-9a9b6ac67b1e.png)
 
+__Compare between 2 group of customers who viewed and didn't view the ad__. I labeled 1 for "viewed user"
+```
+cte8 AS(
+SELECT impression, 
+       SUM(page_views) AS page_views_by_impression, 
+       SUM(cart_adds) AS cart_adds_by_impression, 
+       SUM(purchase) AS purchase_by_impression
+FROM cte7
+GROUP BY impression)
 
- 
+SELECT impression, ROUND((purchase_by_impression/page_views_by_impression),2)*100 AS conversion_rate
+FROM cte8
+```
+![image](https://user-images.githubusercontent.com/89729029/137302600-a68a9b37-497f-4913-a0f4-eff63bebb9e9.png)
+```
+cte9 AS
+(
+SELECT campaign_name, 
+       impression, 
+       SUM(page_views) AS page_views_by_impression, 
+       SUM(cart_adds) AS cart_adds_by_impression, 
+       SUM(purchase) AS purchase_by_impression
+FROM cte7
+GROUP BY campaign_name, 
+         impression
+ORDER BY campaign_name)
+
+SELECT campaign_name, 
+       impression, 
+       ROUND((purchase_by_impression/page_views_by_impression),2) AS conversion_rate
+FROM cte9
+```
+![image](https://user-images.githubusercontent.com/89729029/137305590-0eb121a8-0148-4e00-a7c1-7c0b0beb8c57.png)
+![image](https://user-images.githubusercontent.com/89729029/137305628-3cbf5c99-b688-40c7-b9fe-25ec61d69617.png)
