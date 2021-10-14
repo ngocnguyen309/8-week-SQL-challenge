@@ -11,6 +11,7 @@ Generate a table that has 1 single row for every unique visit_id record and has 
 - click: count of ad clicks for each visit
 - (Optional column) cart_products: a comma separated text value with products added to the cart sorted by the order they were added to the cart (hint: use the sequence_number)
 
+__CTE1__: JOIN __clique_bait.users__ AND __clique_bait.events__ to get _user_id_, _visit_id_ and _MIN(event_time)_ for each visit_id
 ```
 WITH cte1 AS
 (
@@ -23,6 +24,7 @@ ON u.cookie_id=e.cookie_id
 GROUP BY user_id, visit_id
 ),
 ```
+__CTE2__: Calculate the number of views AS _page_views_ and addition to cart AS _cart_adds_ for each visit record.  
 ```
 cte2 AS
 (
@@ -41,6 +43,7 @@ GROUP BY user_id,
          DATE(visit_start_time)
 ),
 ```
+__CTE3__: Create a table to find out the visitors who purchased at least one product by filter the visit_id has event_type=3.
 ```
 cte3 AS 
 (
@@ -49,6 +52,7 @@ FROM clique_bait.events
 WHERE event_type=3
 ),
 ```
+__CTE4__: 
 ```
 cte4 AS
 (                                   
