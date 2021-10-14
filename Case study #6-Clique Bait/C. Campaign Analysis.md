@@ -119,7 +119,7 @@ ON date_start BETWEEN start_date AND end_date
 
 ![image](https://user-images.githubusercontent.com/89729029/137249734-b6bda5e3-76fd-4739-bb39-9a9b6ac67b1e.png)
 
-__Compare between 2 group of customers who viewed and didn't view the ad__. I labeled 1 for "viewed user"
+__There are 2 group of customers who viewed and didn't view the ad__. I labeled 1 for "viewed user"
 ```
 cte8 AS(
 SELECT impression, 
