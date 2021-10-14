@@ -117,6 +117,7 @@ JOIN clique_bait.campaign_identifier AS c
 ON date_start BETWEEN start_date AND end_date 
 ```
 
+![image](https://user-images.githubusercontent.com/89729029/137249734-b6bda5e3-76fd-4739-bb39-9a9b6ac67b1e.png)
 
 
  
