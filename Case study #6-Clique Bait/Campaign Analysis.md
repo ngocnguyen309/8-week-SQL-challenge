@@ -50,12 +50,46 @@ SELECT user_id,
        (CASE WHEN c3.visit_id IS NOT NULL THEN 1 ELSE 0 END) purchase
 FROM cte2  AS c2                        
 LEFT JOIN cte3  AS c3                   
-ON c2.visit_id=c3.visit_id
+ON c2.visit_id=c3.visit_id),
+cte5 as 
+(        
+SELECT visit_id, 
+       event_type
+FROM clique_bait.events                                   
+WHERE event_type=4 
+OR event_type=5
 ),
-cte5 AS 
-(                                                             
-SELECT *
-FROM cte4 as c4                                   
+cte6 AS (                                   
+SELECT user_id, 
+       c4.visit_id, 
+       date_start, 
+       page_views, 
+       cart_adds, 
+       purchase, 
+       SUM(CASE WHEN event_type=4 THEN 1 ELSE 0 END) AS impression, 
+       SUM(CASE WHEN event_type=5 THEN 1 ELSE 0 END) AS click
+FROM cte4 AS c4
+LEFT JOIN cte5 AS c5
+ON c4.visit_id=c5.visit_id
+GROUP BY user_id, 
+         c4.visit_id, 
+         date_start, 
+         page_views, 
+         cart_adds, 
+         purchase)
+
+SELECT user_id, 
+       visit_id, 
+       date_start, 
+       page_views, 
+       cart_adds, 
+       purchase, 
+       campaign_name, 
+       impression, 
+       click
+FROM cte6 as c6                                   
 JOIN clique_bait.campaign_identifier AS c                                 
-ON c4.date_start BETWEEN start_date AND end_date
-)  
+ON date_start BETWEEN start_date AND end_date 
+
+
+ 
