@@ -108,7 +108,7 @@ ORDER BY ROUND(100*((twelve_weeks_after-twelve_weeks_before)/twelve_weeks_before
 ```
 ![image](https://user-images.githubusercontent.com/89729029/136661430-f0699974-e03f-49d5-a6c8-85505867dbe8.png)
 
-__4. demoraphic
+__4. demoraphic__
 ```
 WITH week_sales AS 
 (
